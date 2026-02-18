@@ -1,0 +1,157 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-image: url("login2/logfond.jpg");
+  }
+  #video_background {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    background-size: cover;
+    overflow: hidden;
+  }
+  
+  .form-register {
+    width: 400px;
+    background: #24303c;
+    padding: 30px;
+    margin: auto;
+    margin-top: 50px;
+    margin: left 100px;   ;
+    border-radius: 4px;
+    font-family: 'Times New Roman'; 
+    color: white;
+    box-shadow: 7px 13px 37px #000;
+  } 
+  
+  .form-register h4 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: white;
+    font-style: normal;
+    text-align: center;
+    font-family: 'Times New Roman';
+
+    
+  }
+  
+  .controls {
+    width: 100%;
+    background: #24303c;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    border: 1px solid #1f53c5;
+    font-family: 'calibri';
+    font-size: 18px;
+    color: white;
+  }
+  
+  .form-register p {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: white;
+    font-family: 'Times New Roman';
+    text-align: center;
+  }
+  
+  .form-register a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .form-register a:hover {
+    color: white;
+    text-decoration: underline;
+  }
+  
+  .form-register .botons {
+    width: 100%;
+    background: #1f53c5;
+    border: none;
+    padding: 12px;
+    color: white;
+    margin: 16px 0;
+    font-size: 16px;
+  }
+  .navbar-form input {
+    border: none !important;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+blockquote {
+    margin: 20px 0 20px;
+    padding: 30px;
+}
+
+button {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.full {
+    float: left;
+    width: 100%;
+}
+
+.layout_padding {
+    padding-top: 90px;
+    padding-bottom: 0px;
+}
+
+.padding_0 {
+    padding: 0px;
+}
+
+.logo {
+    width: 15%;
+    float: left;
+}
+
+
+@keyframes fadeEffect {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+    }
+}
+  
+
+
+
+.form-register p {
+  font-size: 22px;
+    margin-bottom: 20px;
+    color: white;
+    font-style: normal;
+    text-align: center;
+    font-family: 'Calibri';
+
+}
+
+#salir {
+  font-size: 22px;
+    margin-bottom: 20px;
+    color: white;
+    font-style: normal;
+    text-align: center;
+    font-family: 'Times New Roman';
+}

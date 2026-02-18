@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Ejemplo de pagina de sueldo
+        </title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <script>
+            let Sueldo=0
+            let porcentaje=0;
+            let EX=0 
+            let ISR=0;
+            let lI=0;
+            let pr=0;
+            let CF=0;
+
+            Sueldo = parseFloat(prompt("ingresa el sueldo del empleado:"));
+            if (Sueldo <= 6332.85) {
+                porcentaje=0.064
+                lI=0
+                CF=14.32
+            }
+            else if (Sueldo >= 6332.06 && Sueldo <= 11128.01) {
+                porcentaje=0.1088
+                lI=6332.06
+                CF=371.83
+            }
+            else if (Sueldo >= 11128.02 && Sueldo <= 12935.82) {
+                porcentaje=0.1600
+                lI=11128.02
+                CF=893.63
+             }
+             else if (Sueldo >= 12935.83 && Sueldo <= 15487.71) {
+                porcentaje=0.1792
+                lI=12935.83
+                CF=1182.89
+             }
+             else if (Sueldo >= 15483.72 && Sueldo <= 31236.49) {
+                porcentaje=0.2136
+                lI=15483.72
+                CF=1640.16
+             }
+             else if (Sueldo >= 31236.50 && Sueldo <= 49233.00) {
+                porcentaje=0.500412
+                lI=31236.50
+                CF=5004.12
+             }
+            EX=(Sueldo-lI)*porcentaje
+            ISR=CF+EX
+             
+            document.write("Como  sueldo es de" + Sueldo + "a continuacion de deglozan los impuestos");
+            document.write("<br>");
+            document.write("La cuota fija ese "+CF.toFixed(2));
+            document.write("<br>");
+            document.write("El excedente es de "+EX.toFixed(2));
+            document.write("<br>");
+            document.write("El isr a pagar es "+ISR.toFixed(2));
+            document.write("<br>");
+            
+            
+
+
+            
+        </script>
+    </body>
+</html>

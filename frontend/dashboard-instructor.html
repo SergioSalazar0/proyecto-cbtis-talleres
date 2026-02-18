@@ -1,0 +1,2376 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/png" href="./cbtis258-logo.webp">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<title>Dashboard Instructor</title>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="assets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="assets/css/light-bootstrap-dashboard.css?v=1.4.0" rel="stylesheet"/>
+
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="assets/css/demo.css" rel="stylesheet" />
+
+
+    <!--     Fonts and icons     -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css' rel='stylesheet' />
+    <!-- Chartist CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/chartist@0.11.4/dist/chartist.min.css" rel="stylesheet" />
+    <!-- Chatbot CSS -->
+    <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body class="dashboard-instructor">
+
+<div class="wrapper">
+    <div class="sidebar" data-color="purple" data-image="assets/img/maestro.jpeg">
+
+    <!--   you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple" -->
+
+
+    	<div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="" class="simple-text">
+                    DASHBOARD
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li>
+                </li>
+                <li class="active" id="menu-perfil">
+                    <a href="javascript:void(0)" onclick="mostrarSeccion('perfil')">
+                        <i class="pe-7s-user"></i>
+                        <p>Perfil Usuario</p>
+                    </a>
+                </li>
+                <li id="menu-calendario">
+                    <a href="javascript:void(0)" onclick="mostrarSeccion('calendario')">
+                      <i class="pe-7s-date"></i>
+                        <p>Calendario</p>
+                    </a>
+                </li>
+                <li id="menu-avisos">
+                    <a href="javascript:void(0)" onclick="mostrarSeccion('avisos')">
+                       <i class="pe-7s-pin"></i>
+                        <p>Avisos</p>
+                    </a>
+                </li>
+                <li id="menu-alumnos">
+                    <a href="javascript:void(0)" onclick="mostrarSeccion('alumnos')">
+                        <i class="pe-7s-users"></i>
+                        <p>Alumnos inscritos</p>
+                    </a>
+                </li>
+                 <li>
+                    <a href="#" onclick="cerrarSesion()">
+                        <i class="pe-7s-power"></i>
+                        <p>Cerrar Sesión</p>
+                    </a>
+                </li>
+            </ul>
+    	</div>
+    </div>
+
+    <div class="main-panel">
+		<nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Usuario</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                   
+
+                    <ul class="nav navbar-nav navbar-right">
+                        
+                        
+                        <li>
+                            <a href="#" onclick="cerrarSesion()">
+                                <p>Salir</p>
+                            </a>
+                        </li>
+						<li class="separator hidden-lg hidden-md"></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="content" id="seccion-perfil">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Perfil</h4>
+                            </div>
+                            <div class="content">
+                                <form onsubmit="actualizarPerfil(event)">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Plantel</label>
+                                                <input type="text" class="form-control" disabled placeholder="Plantel" value="CBTis No.258 Mariano Escobedo">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Nombre del instructor</label>
+                                                <input type="text" id="nombre" class="form-control" placeholder="Nombre(s)" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="apellidos">Apellidos</label>
+                                                <input type="text" id="apellidos" class="form-control" placeholder="Apellido Paterno Materno" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Especialidad</label>
+                                                <input type="text" id="especialidad" class="form-control" placeholder="Ej: Educación Física, Artes, Música">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Teléfono</label>
+                                                <input type="tel" id="telefono" class="form-control" placeholder="Número de teléfono personal">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Contacto de emergencia</label>
+                                                <input type="text" id="contacto_emergencia" class="form-control" placeholder="Nombre del contacto">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Número de emergencia</label>
+                                                <input type="tel" id="telefono_emergencia" class="form-control" placeholder="Teléfono del contacto">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Dirección</label>
+                                                <input type="text" id="direccion" class="form-control" placeholder="Dirección completa">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Descripción del instructor</label>
+                                                <textarea rows="5" id="descripcion" class="form-control" placeholder="Descripción, logros y habilidades"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-info btn-fill pull-right">Actualizar Perfil</button>
+                                    <div class="clearfix"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-user">
+                            <div class="image">
+                                <img src="./assets/img/combr-fond.png" alt="..."/>
+                            </div>
+                            <div class="content">
+                                <div class="author">
+                                     <a href="#">
+                                    <img class="avatar border-gray" src="assets/img/user-img.png" alt="..."/>
+
+                                      <h4 class="title" id="instructor-name">Instructor<br />
+                                         <small id="instructor-email">@instructor</small>
+                                      </h4>
+                                    </a>
+                                </div>
+                                <p class="description text-center" id="instructor-descripcion">
+                                    Cargando información...
+                                </p>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Calendario -->
+        <div class="content" id="seccion-calendario" style="display: none;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Calendario de Eventos</h4>
+                                <p class="category">Gestiona las fechas importantes de tus talleres</p>
+                                <button class="btn btn-info btn-fill" onclick="mostrarModalEvento()">
+                                    <i class="pe-7s-plus"></i> Nuevo Evento
+                                </button>
+                            </div>
+                            <div class="content">
+                                <div id="calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal para crear/editar evento -->
+                <div id="modalEvento" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4);">
+                    <div style="background-color:#fefefe; margin:5% auto; padding:20px; border:1px solid #888; width:50%; border-radius:5px;">
+                        <span onclick="cerrarModalEvento()" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+                        <h3>Crear Evento</h3>
+                        <form id="formEvento" onsubmit="guardarEvento(event)">
+                            <div class="form-group">
+                                <label>Taller *</label>
+                                <select id="evento-taller" class="form-control" required>
+                                    <option value="">Selecciona un taller...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Título *</label>
+                                <input type="text" id="evento-titulo" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <textarea id="evento-descripcion" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Evento *</label>
+                                <select id="evento-tipo" class="form-control" required>
+                                    <option value="evento">Evento</option>
+                                    <option value="examen">Examen</option>
+                                    <option value="entrega">Entrega</option>
+                                    <option value="practica">Práctica</option>
+                                    <option value="reunion">Reunión</option>
+                                    <option value="suspension">Suspensión</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha *</label>
+                                <input type="date" id="evento-fecha" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-info btn-fill">Guardar Evento</button>
+                            <button type="button" class="btn btn-default" onclick="cerrarModalEvento()">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Avisos -->
+        <div class="content" id="seccion-avisos" style="display: none;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Avisos y Notificaciones</h4>
+                                <p class="category">Publica avisos importantes para tus alumnos</p>
+                            </div>
+                            <div class="content">
+                                <button class="btn btn-info btn-fill" onclick="mostrarModalAviso()">
+                                    <i class="pe-7s-plus"></i> Nuevo Aviso
+                                </button>
+                                <div class="row" style="margin-top: 20px;">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Taller</th>
+                                                        <th>Título</th>
+                                                        <th>Contenido</th>
+                                                        <th>Fecha Publicación</th>
+                                                        <th>Importante</th>
+                                                        <th>Estado</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tabla-avisos">
+                                                    <tr>
+                                                        <td colspan="7" class="text-center">
+                                                            <i class="pe-7s-refresh" style="font-size: 24px;"></i>
+                                                            <p>Cargando avisos...</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Alumnos -->
+        <div class="content" id="seccion-alumnos" style="display: none;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Alumnos Inscritos</h4>
+                                <p class="category">Lista de alumnos en tus talleres</p>
+                            </div>
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Seleccionar Taller</label>
+                                            <select class="form-control" id="select-taller-alumnos" onchange="cargarAlumnosPorTaller()">
+                                                <option value="">Selecciona un taller...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Buscar Alumno</label>
+                                            <input type="text" class="form-control" id="buscar-alumno" placeholder="Nombre, No. Control..." onkeyup="buscarAlumno()">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <div>
+                                                <span class="label label-info" id="total-alumnos">0 alumnos</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="well" style="margin-bottom: 15px;">
+                                            <h5 style="margin-top: 0;"><i class="pe-7s-date"></i> Sesiones</h5>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group" style="margin-bottom: 0;">
+                                                        <label>Fecha de sesión</label>
+                                                        <input type="date" class="form-control" id="asistencia-fecha">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group" style="margin-bottom: 0;">
+                                                        <label>&nbsp;</label>
+                                                        <button class="btn btn-warning btn-fill btn-block" onclick="actualizarListaAsistencia()">
+                                                            <i class="pe-7s-refresh"></i> Actualizar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr style="margin: 12px 0;">
+                                            <div class="table-responsive">
+                                                <table class="table table-condensed table-hover" style="margin-bottom: 0;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sesión</th>
+                                                            <th>Fecha</th>
+                                                            <th>Registrados</th>
+                                                            <th>Estado</th>
+                                                            <th>Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="historial-sesiones-body">
+                                                        <tr>
+                                                            <td colspan="5" class="text-center text-muted">Aún no hay sesiones registradas.</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Número de control</label>
+                                            <input type="text" class="form-control" id="asistencia-numero-control" placeholder="Ej: 2250405123">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <button class="btn btn-info btn-fill btn-block" onclick="iniciarEscaneoCamara()">
+                                                <i class="pe-7s-camera"></i> Registrar con cámara
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="asistencia-feedback" class="alert" style="display:none; margin-top: 8px;"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No. Control</th>
+                                                        <th>Nombre Completo</th>
+                                                        <th>Grupo</th>
+                                                        <th>Semestre</th>
+                                                        <th>Email</th>
+                                                        <th>Teléfono</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tabla-alumnos">
+                                                    <tr>
+                                                        <td colspan="7" class="text-center">
+                                                            <p>Selecciona un taller para ver los alumnos inscritos</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="footer">
+            <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Company
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Portfolio
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                               Blog
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <p class="copyright pull-right">
+                    &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                </p>
+            </div>
+        </footer>
+
+    </div>
+</div>
+
+<!-- Modal para Crear/Editar Aviso -->
+<div class="modal fade" id="modalAviso" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="cerrarModalAviso()">&times;</button>
+                <h4 class="modal-title" id="tituloModalAviso">Nuevo Aviso</h4>
+            </div>
+            <div class="modal-body">
+                <form id="formAviso">
+                    <input type="hidden" id="aviso-id">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Taller *</label>
+                                <select class="form-control" id="aviso-taller" required>
+                                    <option value="">Selecciona un taller...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Título *</label>
+                                <input type="text" class="form-control" id="aviso-titulo" placeholder="Título del aviso" required maxlength="200">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <div>
+                                    <label style="cursor: pointer; display: flex; align-items: center; margin-top: 8px;">
+                                        <input type="checkbox" id="aviso-importante" style="width: 18px; height: 18px; margin-right: 8px; cursor: pointer;">
+                                        <strong>Marcar como importante</strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Contenido *</label>
+                                <textarea class="form-control" id="aviso-contenido" rows="5" placeholder="Escribe el contenido del aviso..." required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Fecha de Publicación *</label>
+                                <input type="datetime-local" class="form-control" id="aviso-fecha-publicacion" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Fecha de Expiración (opcional)</label>
+                                <input type="datetime-local" class="form-control" id="aviso-fecha-expiracion">
+                                <small class="form-text text-muted">Deja vacío si no expira</small>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="cerrarModalAviso()">Cancelar</button>
+                <button type="button" class="btn btn-info btn-fill" onclick="guardarAviso()">Guardar Aviso</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Información de Emergencia -->
+<div class="modal fade" id="modalEmergencia" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="cerrarModalEmergencia()">&times;</button>
+                <h4 class="modal-title">Información de Emergencia</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5><strong id="emergencia-nombre-alumno"></strong></h5>
+                        <p class="text-muted" id="emergencia-datos-alumno"></p>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="pe-7s-call"></i> Contacto de Emergencia</h5>
+                        <table class="table">
+                            <tr>
+                                <td><strong>Nombre:</strong></td>
+                                <td id="emergencia-contacto-nombre">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Teléfono:</strong></td>
+                                <td id="emergencia-contacto-telefono">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Relación:</strong></td>
+                                <td id="emergencia-contacto-relacion">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><i class="pe-7s-note2"></i> Información Médica</h5>
+                        <table class="table">
+                            <tr>
+                                <td><strong>Tipo de Sangre:</strong></td>
+                                <td id="emergencia-tipo-sangre">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Alergias:</strong></td>
+                                <td id="emergencia-alergias">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Medicamentos:</strong></td>
+                                <td id="emergencia-medicamentos">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Condiciones:</strong></td>
+                                <td id="emergencia-condiciones">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="cerrarModalEmergencia()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Escáner de Cámara -->
+<div class="modal fade" id="modalCamaraAsistencia" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="detenerEscaneoCamara()">&times;</button>
+                <h4 class="modal-title">Escanear código con cámara</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">Apunta la cámara al código QR del alumno para registrar la asistencia.</p>
+                <video id="video-asistencia" autoplay playsinline style="width: 100%; max-height: 420px; background: #000; border-radius: 8px;"></video>
+                <canvas id="canvas-asistencia" style="display:none;"></canvas>
+                <p id="estado-camara-asistencia" class="text-info" style="margin-top: 10px;">Iniciando cámara...</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" onclick="iniciarEscaneoCamara()">Iniciar sesión</button>
+                <button type="button" class="btn btn-default" onclick="detenerEscaneoCamara()">Cerrar sesión</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+      <script src="js/config.js"></script>
+
+    <!--   Core JS Files   -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <!-- jQuery desde CDN -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS desde CDN -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Chartist desde CDN -->
+	<script src="https://cdn.jsdelivr.net/npm/chartist@0.11.4/dist/chartist.min.js"></script>
+    <!-- Bootstrap Notify desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@3.1.3/bootstrap-notify.min.js"></script>
+
+    <!--  Google Maps Plugin    -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+    <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+	<script src="assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+	<script src="assets/js/demo.js"></script>
+	
+	<!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/locales/es.js'></script>
+
+    <script>
+        // Configuración de Axios
+        let calendar; // Variable global para el calendario
+        
+        // Función para cambiar entre secciones
+        function mostrarSeccion(seccion) {
+            // Ocultar todas las secciones
+            document.getElementById('seccion-perfil').style.display = 'none';
+            document.getElementById('seccion-calendario').style.display = 'none';
+            document.getElementById('seccion-avisos').style.display = 'none';
+            document.getElementById('seccion-alumnos').style.display = 'none';
+            
+            // Remover clase active de todos los menús
+            document.getElementById('menu-perfil').classList.remove('active');
+            document.getElementById('menu-calendario').classList.remove('active');
+            document.getElementById('menu-avisos').classList.remove('active');
+            document.getElementById('menu-alumnos').classList.remove('active');
+            
+            // Mostrar la sección seleccionada y activar su menú
+            document.getElementById('seccion-' + seccion).style.display = 'block';
+            document.getElementById('menu-' + seccion).classList.add('active');
+            
+            // Si se muestra el calendario, renderizarlo
+            if (seccion === 'calendario') {
+                setTimeout(() => {
+                    if (calendar) {
+                        calendar.render();
+                        calendar.refetchEvents();
+                    } else {
+                        inicializarCalendario();
+                    }
+                }, 100);
+            }
+            
+            // Si se muestra avisos, cargar avisos
+            if (seccion === 'avisos') {
+                setTimeout(() => {
+                    cargarAvisos();
+                }, 100);
+            }
+            
+            // Si se muestra alumnos, cargar talleres
+            if (seccion === 'alumnos') {
+                setTimeout(() => {
+                    cargarTalleresParaAlumnos();
+                    prepararFechaAsistenciaInstructor();
+                }, 100);
+            }
+        }
+        
+        // Inicializar FullCalendar
+        function inicializarCalendario() {
+            const calendarEl = document.getElementById('calendar');
+            
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'es',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,listWeek'
+                },
+                buttonText: {
+                    today: 'Hoy',
+                    month: 'Mes',
+                    week: 'Semana',
+                    list: 'Lista'
+                },
+                events: function(info, successCallback, failureCallback) {
+                    cargarEventos(info.start, info.end, successCallback, failureCallback);
+                },
+                eventClick: function(info) {
+                    mostrarDetalleEvento(info.event);
+                },
+                dateClick: function(info) {
+                    mostrarModalEvento(info.dateStr);
+                },
+                height: 'auto'
+            });
+            
+            calendar.render();
+        }
+        
+        // Cargar eventos del backend
+        async function cargarEventos(start, end, successCallback, failureCallback) {
+            try {
+                const startDate = start.toISOString().split('T')[0];
+                const endDate = end.toISOString().split('T')[0];
+                
+                const response = await axios.get(`${API_BASE_URL}/calendario/rango`, {
+                    params: {
+                        fechaInicio: startDate,
+                        fechaFin: endDate
+                    }
+                });
+                
+                console.log('📅 Respuesta del calendario:', response.data);
+                
+                // El backend devuelve un objeto agrupado por fecha: { "2025-11-14": [eventos] }
+                // Necesitamos convertirlo a un array plano
+                const eventosData = response.data.data || {};
+                let eventos = [];
+                
+                // Si es un objeto (agrupado por fecha), convertirlo a array
+                if (typeof eventosData === 'object' && !Array.isArray(eventosData)) {
+                    // Iterar sobre cada fecha
+                    Object.keys(eventosData).forEach(fecha => {
+                        const eventosDeFecha = eventosData[fecha];
+                        if (Array.isArray(eventosDeFecha)) {
+                            eventosDeFecha.forEach(evento => {
+                                eventos.push({
+                                    id: evento.id,
+                                    title: evento.titulo,
+                                    start: evento.fecha_evento,
+                                    description: evento.descripcion,
+                                    tipo: evento.tipo_evento,
+                                    taller: evento.taller_nombre,
+                                    backgroundColor: getColorByType(evento.tipo_evento),
+                                    borderColor: getColorByType(evento.tipo_evento)
+                                });
+                            });
+                        }
+                    });
+                } else if (Array.isArray(eventosData)) {
+                    // Si ya es un array, procesarlo directamente
+                    eventos = eventosData.map(evento => ({
+                        id: evento.id,
+                        title: evento.titulo,
+                        start: evento.fecha_evento,
+                        description: evento.descripcion,
+                        tipo: evento.tipo_evento,
+                        taller: evento.taller_nombre,
+                        backgroundColor: getColorByType(evento.tipo_evento),
+                        borderColor: getColorByType(evento.tipo_evento)
+                    }));
+                }
+                
+                console.log('📅 Eventos procesados:', eventos);
+                successCallback(eventos);
+                
+            } catch (error) {
+                console.error('❌ Error al cargar eventos:', error);
+                console.error('❌ Detalles del error:', error.response?.data);
+                // No fallar, simplemente retornar array vacío
+                successCallback([]);
+            }
+        }
+        
+        // Obtener color según tipo de evento
+        function getColorByType(tipo) {
+            const colores = {
+                'evento': '#5bc0de',      // Azul claro
+                'examen': '#d9534f',      // Rojo
+                'entrega': '#f0ad4e',     // Naranja
+                'practica': '#5cb85c',    // Verde
+                'reunion': '#9B59B6',     // Morado
+                'suspension': '#95a5a6'   // Gris
+            };
+            return colores[tipo] || '#5bc0de';
+        }
+        
+        // Mostrar formulario para crear evento
+        function mostrarFormEvento(fecha = null) {
+            const titulo = prompt('Título del evento:');
+            if (!titulo) return;
+            
+            const descripcion = prompt('Descripción (opcional):');
+            const tipo = prompt('Tipo de evento (evento/examen/entrega/practica/reunion/suspension):', 'evento');
+            const fechaEvento = fecha || prompt('Fecha del evento (YYYY-MM-DD):');
+            
+            if (!fechaEvento) {
+                alert('La fecha es requerida');
+                return;
+            }
+            
+            crearEvento({
+                titulo,
+                descripcion,
+                tipo_evento: tipo,
+                fecha_evento: fechaEvento
+            });
+        }
+        
+        // Mostrar modal para crear evento
+        async function mostrarModalEvento(fecha = null) {
+            // Cargar talleres del instructor
+            await cargarTalleresInstructor();
+            
+            // Establecer fecha si se proporcionó
+            if (fecha) {
+                document.getElementById('evento-fecha').value = fecha;
+            } else {
+                document.getElementById('evento-fecha').value = new Date().toISOString().split('T')[0];
+            }
+            
+            // Limpiar formulario
+            document.getElementById('evento-titulo').value = '';
+            document.getElementById('evento-descripcion').value = '';
+            document.getElementById('evento-tipo').value = 'evento';
+            
+            // Mostrar modal
+            document.getElementById('modalEvento').style.display = 'block';
+        }
+        
+        // Cerrar modal
+        function cerrarModalEvento() {
+            document.getElementById('modalEvento').style.display = 'none';
+        }
+        
+        // Cargar talleres del instructor
+        async function cargarTalleresInstructor() {
+            try {
+                // Usar el endpoint específico para instructores
+                const response = await axios.get(`${API_BASE_URL}/talleres/mis-talleres`);
+                
+                console.log('👨‍🏫 Respuesta mis-talleres:', response.data);
+                
+                const misTalleres = response.data.data || [];
+                
+                const selectTaller = document.getElementById('evento-taller');
+                selectTaller.innerHTML = '<option value="">Selecciona un taller...</option>';
+                
+                if (misTalleres.length === 0) {
+                    selectTaller.innerHTML = '<option value="">No tienes talleres asignados</option>';
+                    alert('No tienes talleres asignados. Contacta al administrador para que te asigne un taller.');
+                    return;
+                }
+                
+                misTalleres.forEach(taller => {
+                    const option = document.createElement('option');
+                    option.value = taller.id;
+                    option.textContent = `${taller.nombre} (${taller.categoria})`;
+                    selectTaller.appendChild(option);
+                });
+                
+                console.log('✅ Talleres cargados:', misTalleres.length);
+                
+            } catch (error) {
+                console.error('❌ Error al cargar talleres:', error);
+                console.error('❌ Detalles:', error.response?.data);
+                alert('Error al cargar la lista de talleres: ' + (error.response?.data?.message || error.message));
+            }
+        }
+        
+        // Guardar evento desde el formulario
+        async function guardarEvento(event) {
+            event.preventDefault();
+            
+            const eventoData = {
+                taller_id: document.getElementById('evento-taller').value,
+                titulo: document.getElementById('evento-titulo').value,
+                descripcion: document.getElementById('evento-descripcion').value,
+                tipo_evento: document.getElementById('evento-tipo').value,
+                fecha_evento: document.getElementById('evento-fecha').value
+            };
+            
+            await crearEvento(eventoData);
+            cerrarModalEvento();
+        }
+        
+        // Crear evento en el backend
+        async function crearEvento(eventoData) {
+            try {
+                const response = await axios.post(`${API_BASE_URL}/calendario`, eventoData);
+                
+                alert('✅ Evento creado exitosamente');
+                calendar.refetchEvents();
+                
+            } catch (error) {
+                console.error('❌ Error al crear evento:', error);
+                alert(error.response?.data?.message || 'Error al crear el evento');
+            }
+        }
+        
+        // Mostrar detalle del evento
+        function mostrarDetalleEvento(evento) {
+            const mensaje = `
+Título: ${evento.title}
+Fecha: ${evento.start.toLocaleDateString('es-MX')}
+Tipo: ${evento.extendedProps.tipo}
+${evento.extendedProps.taller ? 'Taller: ' + evento.extendedProps.taller : ''}
+${evento.extendedProps.description ? 'Descripción: ' + evento.extendedProps.description : ''}
+
+¿Deseas eliminar este evento?
+            `.trim();
+            
+            if (confirm(mensaje)) {
+                eliminarEvento(evento.id);
+            }
+        }
+        
+        // Eliminar evento
+        async function eliminarEvento(eventoId) {
+            try {
+                await axios.delete(`${API_BASE_URL}/calendario/${eventoId}`);
+                
+                alert('✅ Evento eliminado exitosamente');
+                calendar.refetchEvents();
+                
+            } catch (error) {
+                console.error('❌ Error al eliminar evento:', error);
+                alert(error.response?.data?.message || 'Error al eliminar el evento');
+            }
+        }
+        
+        // Verificar autenticación al cargar la página
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🔧 Iniciando dashboard de instructor...');
+            
+            const token = localStorage.getItem('token');
+            console.log('🔑 Token encontrado:', token ? 'Sí' : 'No');
+            
+            if (!token) {
+                alert('Debes iniciar sesión para acceder al dashboard');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Verificar que axios esté disponible
+            if (typeof axios === 'undefined') {
+                console.error('❌ Axios no está disponible');
+                alert('Error: La librería axios no se cargó correctamente');
+                return;
+            }
+            
+            console.log('✅ Axios disponible');
+            
+            // Configurar axios con el token
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            console.log('✅ Token configurado en axios');
+            
+            try {
+                console.log('🔄 Verificando autenticación con:', `${API_BASE_URL}/auth/verify`);
+                
+                // Verificar que el usuario sea instructor
+                const response = await axios.get(`${API_BASE_URL}/auth/verify`);
+                
+                console.log('✅ Respuesta de verificación:', response.data);
+                
+                if (response.data.user.tipo_usuario !== 'instructor') {
+                    alert('No tienes permisos para acceder a esta página');
+                    localStorage.removeItem('token');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                console.log('✅ Usuario es instructor, cargando perfil...');
+                
+                // Cargar datos del perfil
+                await cargarPerfil();
+                
+            } catch (error) {
+                console.error('❌ Error al verificar autenticación:', error);
+                console.error('❌ Error completo:', {
+                    message: error.message,
+                    response: error.response,
+                    request: error.request,
+                    config: error.config
+                });
+                
+                alert('Sesión expirada. Por favor, inicia sesión nuevamente');
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Cargar perfil del instructor
+        async function cargarPerfil() {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/auth/profile`);
+                const perfil = response.data.data;
+                
+                console.log('📊 Perfil cargado:', perfil);
+                console.log('📦 Estructura del perfil:', JSON.stringify(perfil, null, 2));
+                
+                // Llenar el formulario con los datos del perfil
+                const nombreInput = document.getElementById('nombre');
+                const apellidosInput = document.getElementById('apellidos');
+                const especialidadInput = document.getElementById('especialidad');
+                const telefonoInput = document.getElementById('telefono');
+                const contactoInput = document.getElementById('contacto_emergencia');
+                const telefonoEmergenciaInput = document.getElementById('telefono_emergencia');
+                const direccionInput = document.getElementById('direccion');
+                const descripcionInput = document.getElementById('descripcion');
+                
+                if (nombreInput) nombreInput.value = perfil.perfil?.nombre || '';
+                if (apellidosInput) apellidosInput.value = 
+                    `${perfil.perfil?.apellido_paterno || ''} ${perfil.perfil?.apellido_materno || ''}`.trim();
+                if (especialidadInput) especialidadInput.value = perfil.perfil?.especialidad || '';
+                if (telefonoInput) telefonoInput.value = perfil.perfil?.telefono || '';
+                if (contactoInput) contactoInput.value = perfil.perfil?.contacto_emergencia || '';
+                if (telefonoEmergenciaInput) telefonoEmergenciaInput.value = perfil.perfil?.telefono_emergencia || '';
+                if (direccionInput) direccionInput.value = perfil.perfil?.direccion || '';
+                if (descripcionInput) descripcionInput.value = perfil.perfil?.descripcion || '';
+                
+                // Mostrar información en la tarjeta del lado derecho
+                const nombreCompleto = `${perfil.perfil?.nombre || ''} ${perfil.perfil?.apellido_paterno || ''} ${perfil.perfil?.apellido_materno || ''}`.trim();
+                
+                const instructorNameEl = document.getElementById('instructor-name');
+                const instructorEmailEl = document.getElementById('instructor-email');
+                const instructorDescEl = document.getElementById('instructor-descripcion');
+                const navbarBrandEl = document.querySelector('.navbar-brand');
+                
+                if (instructorNameEl) instructorNameEl.textContent = nombreCompleto || 'Sin nombre';
+                if (instructorEmailEl) instructorEmailEl.textContent = perfil.email || '';
+                if (instructorDescEl) instructorDescEl.textContent = perfil.perfil?.descripcion || 'Sin descripción';
+                if (navbarBrandEl) navbarBrandEl.textContent = nombreCompleto || 'Instructor';
+                
+                console.log('✅ Perfil cargado exitosamente en el frontend');
+                
+            } catch (error) {
+                console.error('❌ Error al cargar perfil:', error);
+                console.error('❌ Stack trace:', error.stack);
+                alert('Error al cargar la información del perfil');
+            }
+        }
+        
+        // Actualizar perfil
+        async function actualizarPerfil(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value.trim();
+            const apellidosCompletos = document.getElementById('apellidos').value.trim();
+            const especialidad = document.getElementById('especialidad').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const contacto_emergencia = document.getElementById('contacto_emergencia').value.trim();
+            const telefono_emergencia = document.getElementById('telefono_emergencia').value.trim();
+            const direccion = document.getElementById('direccion').value.trim();
+            const descripcion = document.getElementById('descripcion').value.trim();
+            
+            // Validar campos requeridos
+            if (!nombre || !apellidosCompletos) {
+                alert('Por favor completa los campos de nombre y apellidos');
+                return;
+            }
+            
+            // Separar apellidos (paterno y materno)
+            const apellidos = apellidosCompletos.split(' ');
+            const apellido_paterno = apellidos[0] || '';
+            const apellido_materno = apellidos.slice(1).join(' ') || '';
+            
+            if (!apellido_paterno) {
+                alert('Por favor ingresa al menos un apellido');
+                return;
+            }
+            
+            try {
+                const response = await axios.put(`${API_BASE_URL}/auth/profile`, {
+                    nombre,
+                    apellido_paterno,
+                    apellido_materno,
+                    especialidad,
+                    telefono,
+                    contacto_emergencia,
+                    telefono_emergencia,
+                    direccion,
+                    descripcion
+                });
+                
+                alert('✅ Perfil actualizado exitosamente');
+                
+                // Recargar el perfil para mostrar los cambios
+                await cargarPerfil();
+                
+            } catch (error) {
+                console.error('❌ Error al actualizar perfil:', error);
+                alert(error.response?.data?.message || 'Error al actualizar el perfil');
+            }
+        }
+        
+        // Cerrar sesión
+        function cerrarSesion() {
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
+        }
+        
+        // ============================================
+        // FUNCIONES PARA MÓDULO DE AVISOS
+        // ============================================
+        
+        let avisosData = []; // Almacenar avisos para búsqueda
+        
+        // Cargar avisos cuando se muestra la sección
+        function mostrarSeccionAvisos() {
+            mostrarSeccion('avisos');
+            cargarAvisos();
+        }
+        
+        // Cargar avisos del instructor
+        async function cargarAvisos() {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/avisos/mis-avisos`, {
+                    params: { limit: 100 }
+                });
+                
+                avisosData = response.data.data || [];
+                mostrarAvisosEnTabla(avisosData);
+                
+            } catch (error) {
+                console.error('❌ Error al cargar avisos:', error);
+                document.getElementById('tabla-avisos').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-danger">
+                            <i class="pe-7s-attention"></i>
+                            <p>Error al cargar los avisos</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+        
+        // Mostrar avisos en la tabla
+        function mostrarAvisosEnTabla(avisos) {
+            const tbody = document.getElementById('tabla-avisos');
+            
+            if (!avisos || avisos.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <i class="pe-7s-info"></i>
+                            <p>No tienes avisos registrados</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = avisos.map(aviso => {
+                const fecha = new Date(aviso.fecha_publicacion).toLocaleString('es-MX');
+                const importante = aviso.importante ? '<span class="label label-danger">Importante</span>' : '';
+                const estadoClass = aviso.activo ? 'success' : 'default';
+                const estadoTexto = aviso.activo ? 'Activo' : 'Inactivo';
+                const contenidoCorto = aviso.contenido.length > 50 
+                    ? aviso.contenido.substring(0, 50) + '...' 
+                    : aviso.contenido;
+                
+                return `
+                    <tr>
+                        <td><strong>${aviso.taller_nombre || 'Sin taller'}</strong></td>
+                        <td>${aviso.titulo}</td>
+                        <td>${contenidoCorto}</td>
+                        <td>${fecha}</td>
+                        <td>${importante}</td>
+                        <td><span class="label label-${estadoClass}">${estadoTexto}</span></td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="verDetalleAviso('${aviso.id}')" title="Ver detalle">
+                                <i class="pe-7s-look"></i>
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="editarAviso('${aviso.id}')" title="Editar">
+                                <i class="pe-7s-pen"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarAviso('${aviso.id}')" title="Eliminar">
+                                <i class="pe-7s-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // Mostrar modal para crear aviso
+        async function mostrarModalAviso(avisoId = null) {
+            document.getElementById('tituloModalAviso').textContent = avisoId ? 'Editar Aviso' : 'Nuevo Aviso';
+            document.getElementById('modalAviso').style.display = 'block';
+            document.querySelector('#modalAviso .modal-dialog').parentElement.classList.add('in');
+            document.querySelector('#modalAviso .modal-dialog').parentElement.style.display = 'block';
+            
+            // Cargar talleres en el select
+            await cargarTalleresParaAvisos();
+            
+            // Si es edición, cargar datos del aviso
+            if (avisoId) {
+                const aviso = avisosData.find(a => a.id === avisoId);
+                if (aviso) {
+                    document.getElementById('aviso-id').value = aviso.id;
+                    document.getElementById('aviso-taller').value = aviso.taller_id;
+                    document.getElementById('aviso-titulo').value = aviso.titulo;
+                    document.getElementById('aviso-contenido').value = aviso.contenido;
+                    document.getElementById('aviso-importante').checked = aviso.importante;
+                    
+                    // Formatear fechas para datetime-local
+                    if (aviso.fecha_publicacion) {
+                        const fechaPub = new Date(aviso.fecha_publicacion);
+                        document.getElementById('aviso-fecha-publicacion').value = 
+                            fechaPub.toISOString().slice(0, 16);
+                    }
+                    if (aviso.fecha_expiracion) {
+                        const fechaExp = new Date(aviso.fecha_expiracion);
+                        document.getElementById('aviso-fecha-expiracion').value = 
+                            fechaExp.toISOString().slice(0, 16);
+                    }
+                }
+            } else {
+                // Limpiar formulario
+                document.getElementById('formAviso').reset();
+                document.getElementById('aviso-id').value = '';
+                
+                // Establecer fecha actual como predeterminada
+                const ahora = new Date();
+                document.getElementById('aviso-fecha-publicacion').value = 
+                    ahora.toISOString().slice(0, 16);
+            }
+        }
+        
+        // Cerrar modal de aviso
+        function cerrarModalAviso() {
+            document.getElementById('modalAviso').style.display = 'none';
+            document.querySelector('#modalAviso .modal-dialog').parentElement.classList.remove('in');
+            document.getElementById('formAviso').reset();
+        }
+        
+        // Cargar talleres para avisos
+        async function cargarTalleresParaAvisos() {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/talleres/mis-talleres`);
+                const talleres = response.data.data || [];
+                
+                const select = document.getElementById('aviso-taller');
+                select.innerHTML = '<option value="">Selecciona un taller...</option>';
+                
+                talleres.forEach(taller => {
+                    const option = document.createElement('option');
+                    option.value = taller.id;
+                    option.textContent = `${taller.nombre} (${taller.categoria})`;
+                    select.appendChild(option);
+                });
+                
+            } catch (error) {
+                console.error('❌ Error al cargar talleres:', error);
+                alert('Error al cargar la lista de talleres');
+            }
+        }
+        
+        // Guardar aviso (crear o actualizar)
+        async function guardarAviso() {
+            const avisoId = document.getElementById('aviso-id').value;
+            const taller_id = document.getElementById('aviso-taller').value;
+            const titulo = document.getElementById('aviso-titulo').value.trim();
+            const contenido = document.getElementById('aviso-contenido').value.trim();
+            const importante = document.getElementById('aviso-importante').checked;
+            const fecha_publicacion = document.getElementById('aviso-fecha-publicacion').value;
+            const fecha_expiracion = document.getElementById('aviso-fecha-expiracion').value || null;
+            
+            // Validar campos requeridos
+            if (!taller_id || !titulo || !contenido || !fecha_publicacion) {
+                alert('Por favor completa todos los campos requeridos');
+                return;
+            }
+            
+            try {
+                const data = {
+                    taller_id,
+                    titulo,
+                    contenido,
+                    importante,
+                    fecha_publicacion,
+                    fecha_expiracion
+                };
+                
+                if (avisoId) {
+                    // Actualizar aviso existente
+                    await axios.put(`${API_BASE_URL}/avisos/${avisoId}`, data);
+                    alert('✅ Aviso actualizado exitosamente');
+                } else {
+                    // Crear nuevo aviso
+                    await axios.post(`${API_BASE_URL}/avisos`, data);
+                    alert('✅ Aviso creado exitosamente');
+                }
+                
+                cerrarModalAviso();
+                await cargarAvisos();
+                
+            } catch (error) {
+                console.error('❌ Error al guardar aviso:', error);
+                alert(error.response?.data?.message || 'Error al guardar el aviso');
+            }
+        }
+        
+        // Ver detalle del aviso
+        function verDetalleAviso(avisoId) {
+            const aviso = avisosData.find(a => a.id === avisoId);
+            if (!aviso) return;
+            
+            const fecha = new Date(aviso.fecha_publicacion).toLocaleString('es-MX');
+            const expiracion = aviso.fecha_expiracion 
+                ? new Date(aviso.fecha_expiracion).toLocaleString('es-MX') 
+                : 'Sin expiración';
+            
+            const mensaje = `
+📋 Detalle del Aviso
+
+Taller: ${aviso.taller_nombre}
+Título: ${aviso.titulo}
+Contenido: ${aviso.contenido}
+Fecha de publicación: ${fecha}
+Fecha de expiración: ${expiracion}
+Importante: ${aviso.importante ? 'Sí' : 'No'}
+Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
+            `.trim();
+            
+            alert(mensaje);
+        }
+        
+        // Editar aviso
+        function editarAviso(avisoId) {
+            mostrarModalAviso(avisoId);
+        }
+        
+        // Eliminar aviso
+        async function eliminarAviso(avisoId) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este aviso?')) {
+                return;
+            }
+            
+            try {
+                await axios.delete(`${API_BASE_URL}/avisos/${avisoId}`);
+                alert('✅ Aviso eliminado exitosamente');
+                await cargarAvisos();
+                
+            } catch (error) {
+                console.error('❌ Error al eliminar aviso:', error);
+                alert(error.response?.data?.message || 'Error al eliminar el aviso');
+            }
+        }
+        
+        // ============================================
+        // FUNCIONES PARA MÓDULO DE ALUMNOS INSCRITOS
+        // ============================================
+        
+        let alumnosData = []; // Almacenar alumnos para búsqueda
+        let alumnosCompletos = []; // Almacenar todos los datos de alumnos
+        let tallerSeleccionadoId = '';
+        let cameraStream = null;
+        let scanAnimationFrame = null;
+        let procesandoEscaneo = false;
+        let ultimoNumeroControlEscaneado = '';
+        let ultimoEscaneoMs = 0;
+        let timerActualizacionPostSesion = null;
+        let historialSesiones = [];
+        let sesionEscaneoActual = null;
+        let fechaSesionContinuacion = null;
+        const resumenAsistenciaCache = new Map();
+
+        function prepararFechaAsistenciaInstructor() {
+            const input = document.getElementById('asistencia-fecha');
+            if (!input) return;
+            if (!input.value) {
+                input.value = new Date().toISOString().slice(0, 10);
+            }
+        }
+        
+        // Cargar talleres para seleccionar
+        async function cargarTalleresParaAlumnos() {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/talleres/mis-talleres`);
+                const talleres = response.data.data || [];
+                
+                const select = document.getElementById('select-taller-alumnos');
+                select.innerHTML = '<option value="">Selecciona un taller...</option>';
+
+                if (talleres.length === 0) {
+                    document.getElementById('tabla-alumnos').innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <i class="pe-7s-info" style="font-size: 24px;"></i>
+                                <p>No tienes talleres asignados actualmente</p>
+                            </td>
+                        </tr>
+                    `;
+                    document.getElementById('total-alumnos').textContent = '0 alumnos';
+                    historialSesiones = [];
+                    sesionEscaneoActual = null;
+                    renderizarHistorialSesiones();
+                    return;
+                }
+                
+                talleres.forEach(taller => {
+                    const option = document.createElement('option');
+                    option.value = taller.id;
+                    option.textContent = `${taller.nombre} (${taller.categoria})`;
+                    select.appendChild(option);
+                });
+
+                if (!select.value) {
+                    select.value = talleres[0].id;
+                }
+
+                await cargarAlumnosPorTaller();
+                
+            } catch (error) {
+                console.error('❌ Error al cargar talleres:', error);
+            }
+        }
+
+        function obtenerFechaAsistenciaSeleccionada() {
+            const fechaInput = document.getElementById('asistencia-fecha');
+            return fechaInput?.value || new Date().toISOString().slice(0, 10);
+        }
+
+        function normalizarNumeroControl(texto) {
+            if (!texto) return '';
+            const valor = String(texto).trim();
+
+            // Formato QR del sistema: CBTIS258|2250405123
+            const matchFormatoSistema = valor.match(/^CBTIS258\|(.+)$/i);
+            if (matchFormatoSistema?.[1]) {
+                return matchFormatoSistema[1].trim();
+            }
+
+            // Formato QR JSON: {"numero_control":"2250405123"}
+            if (valor.startsWith('{') && valor.endsWith('}')) {
+                try {
+                    const payload = JSON.parse(valor);
+                    if (payload?.numero_control) {
+                        return String(payload.numero_control).trim();
+                    }
+                } catch (_) {
+                    // Si no es JSON válido, continuar con otras reglas
+                }
+            }
+
+            const matchParametro = valor.match(/numero_control=([^&\s]+)/i);
+            if (matchParametro?.[1]) {
+                return decodeURIComponent(matchParametro[1]).trim();
+            }
+
+            if (valor.toUpperCase().startsWith('NC:')) {
+                return valor.substring(3).trim();
+            }
+
+            return valor;
+        }
+
+        function mostrarFeedbackAsistencia(mensaje, tipo = 'info') {
+            const contenedor = document.getElementById('asistencia-feedback');
+            if (!contenedor) return;
+
+            contenedor.className = 'alert';
+
+            if (tipo === 'success') {
+                contenedor.classList.add('alert-success');
+            } else if (tipo === 'danger') {
+                contenedor.classList.add('alert-danger');
+            } else if (tipo === 'warning') {
+                contenedor.classList.add('alert-warning');
+            } else {
+                contenedor.classList.add('alert-info');
+            }
+
+            contenedor.textContent = mensaje;
+            contenedor.style.display = 'block';
+
+            clearTimeout(mostrarFeedbackAsistencia._timer);
+            mostrarFeedbackAsistencia._timer = setTimeout(() => {
+                contenedor.style.display = 'none';
+            }, 4500);
+        }
+
+        function renderizarHistorialSesiones() {
+            const tbody = document.getElementById('historial-sesiones-body');
+            if (!tbody) return;
+
+            if (!historialSesiones.length) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Aún no hay sesiones registradas.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = historialSesiones.map((sesion, index) => {
+                const esActiva = String(sesion.estado || '').toLowerCase() === 'activa' || sesion.estado === 'Activa';
+                const estadoClass = esActiva ? 'label label-success' : 'label label-default';
+                const estadoTexto = esActiva ? 'Activa' : 'Cerrada';
+                return `
+                    <tr>
+                        <td>#${index + 1}</td>
+                        <td>${sesion.fecha_sesion}</td>
+                        <td>${sesion.registrados || 0}</td>
+                        <td><span class="${estadoClass}">${estadoTexto}</span></td>
+                        <td>
+                            <button class="btn btn-xs btn-warning" onclick="reanudarSesionHistorial('${sesion.id}')">
+                                <i class="pe-7s-refresh"></i> Actualizar
+                            </button>
+                            <button class="btn btn-xs btn-success" onclick="exportarAsistenciasExcel('${sesion.fecha_sesion}', '${sesion.id}')" style="margin-left: 6px;">
+                                <i class="pe-7s-download"></i> Excel
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function normalizarSesionApi(sesion) {
+            return {
+                id: sesion.id,
+                fecha_sesion: sesion.fecha_sesion,
+                registrados: Number(sesion.registrados ?? sesion.total_registrados ?? 0),
+                estado: sesion.estado || 'Cerrada',
+                created_at: sesion.created_at,
+                updated_at: sesion.updated_at,
+                closed_at: sesion.closed_at
+            };
+        }
+
+        async function cargarHistorialSesiones() {
+            const tallerId = document.getElementById('select-taller-alumnos')?.value;
+            if (!tallerId) {
+                historialSesiones = [];
+                sesionEscaneoActual = null;
+                renderizarHistorialSesiones();
+                return;
+            }
+
+            try {
+                const response = await axios.get(`${API_BASE_URL}/talleres/${tallerId}/sesiones-asistencia`);
+                const sesiones = response.data?.data || [];
+                historialSesiones = sesiones.map(normalizarSesionApi);
+                sesionEscaneoActual = historialSesiones.find(item => String(item.estado).toLowerCase() === 'activa') || null;
+                renderizarHistorialSesiones();
+            } catch (error) {
+                console.error('❌ Error al cargar historial de sesiones:', error);
+                historialSesiones = [];
+                sesionEscaneoActual = null;
+                renderizarHistorialSesiones();
+            }
+        }
+
+        async function crearSesionEscaneo(fechaSesion) {
+            const tallerId = document.getElementById('select-taller-alumnos')?.value;
+            if (!tallerId) return null;
+
+            try {
+                const response = await axios.post(`${API_BASE_URL}/talleres/${tallerId}/sesiones-asistencia`, {
+                    fecha_sesion: fechaSesion
+                });
+
+                const nueva = normalizarSesionApi(response.data?.data || {});
+                historialSesiones.unshift(nueva);
+                sesionEscaneoActual = nueva;
+                renderizarHistorialSesiones();
+                return nueva;
+            } catch (error) {
+                console.error('❌ Error al crear sesión de escaneo:', error);
+                mostrarFeedbackAsistencia('No se pudo crear la sesión en base de datos.', 'danger');
+                return null;
+            }
+        }
+
+        async function cerrarSesionEscaneoActual() {
+            if (!sesionEscaneoActual) return;
+
+            const tallerId = document.getElementById('select-taller-alumnos')?.value;
+
+            try {
+                if (tallerId) {
+                    const response = await axios.put(
+                        `${API_BASE_URL}/talleres/${tallerId}/sesiones-asistencia/${sesionEscaneoActual.id}`,
+                        {
+                            estado: 'cerrada',
+                            total_registrados: sesionEscaneoActual.registrados || 0
+                        }
+                    );
+
+                    const actualizada = normalizarSesionApi(response.data?.data || {});
+                    historialSesiones = historialSesiones.map(item => item.id === actualizada.id ? actualizada : item);
+                }
+            } catch (error) {
+                console.error('❌ Error al cerrar sesión de escaneo:', error);
+            }
+
+            sesionEscaneoActual = null;
+            await cargarHistorialSesiones();
+            renderizarHistorialSesiones();
+        }
+
+        async function reanudarSesionHistorial(sesionId) {
+            const sesion = historialSesiones.find(item => item.id === sesionId);
+            if (!sesion) return;
+
+            const fechaInput = document.getElementById('asistencia-fecha');
+            if (fechaInput) {
+                fechaInput.value = sesion.fecha_sesion;
+            }
+
+            fechaSesionContinuacion = sesion.fecha_sesion;
+            sesionEscaneoActual = null;
+            iniciarEscaneoCamara();
+        }
+
+        async function actualizarListaAsistencia(silencioso = false) {
+            const tallerId = document.getElementById('select-taller-alumnos')?.value;
+
+            if (!tallerId) {
+                if (!silencioso) {
+                    mostrarFeedbackAsistencia('Selecciona un taller antes de actualizar.', 'warning');
+                }
+                return;
+            }
+
+            try {
+                await cargarAlumnosPorTaller();
+                await cargarHistorialSesiones();
+                renderizarHistorialSesiones();
+                if (!silencioso) {
+                    mostrarFeedbackAsistencia('🔄 Lista actualizada correctamente.', 'success');
+                }
+            } catch (error) {
+                console.error('❌ Error al actualizar lista de asistencia:', error);
+                if (!silencioso) {
+                    mostrarFeedbackAsistencia('No se pudo actualizar la lista.', 'danger');
+                }
+            }
+        }
+
+        function programarActualizacionPostSesion() {
+            clearTimeout(timerActualizacionPostSesion);
+
+            // Refresco inmediato
+            actualizarListaAsistencia(true);
+
+            // Refresco diferido para cubrir registros que lleguen con retraso
+            timerActualizacionPostSesion = setTimeout(() => {
+                actualizarListaAsistencia(true);
+                mostrarFeedbackAsistencia('Se actualizó la lista después de cerrar sesión de escaneo.', 'info');
+            }, 1800);
+        }
+
+        async function registrarAsistenciaPorNumeroControl(numeroControlDirecto = null) {
+            const tallerId = document.getElementById('select-taller-alumnos').value;
+            const fechaSesion = obtenerFechaAsistenciaSeleccionada();
+            const inputNumeroControl = document.getElementById('asistencia-numero-control');
+            const numeroControl = normalizarNumeroControl(numeroControlDirecto || inputNumeroControl.value);
+
+            if (!tallerId) {
+                alert('Selecciona un taller antes de registrar asistencia');
+                return;
+            }
+
+            if (!numeroControl) {
+                alert('Ingresa o escanea un número de control');
+                return;
+            }
+
+            try {
+                const response = await axios.post(`${API_BASE_URL}/talleres/${tallerId}/asistencias`, {
+                    numero_control: numeroControl,
+                    fecha_sesion: fechaSesion
+                });
+
+                const alumno = response.data?.data?.alumno;
+                const nombreAlumno = alumno
+                    ? `${alumno.nombre || ''} ${alumno.apellido_paterno || ''} ${alumno.apellido_materno || ''}`.trim()
+                    : null;
+
+                inputNumeroControl.value = '';
+                await cargarAlumnosPorTaller();
+
+                if (sesionEscaneoActual) {
+                    try {
+                        const updateSesion = await axios.post(
+                            `${API_BASE_URL}/talleres/${tallerId}/sesiones-asistencia/${sesionEscaneoActual.id}/incrementar`
+                        );
+
+                        const sesionActualizada = normalizarSesionApi(updateSesion.data?.data || {});
+                        sesionEscaneoActual = sesionActualizada;
+                        historialSesiones = historialSesiones.map(item =>
+                            item.id === sesionActualizada.id ? sesionActualizada : item
+                        );
+                    } catch (errorSesion) {
+                        console.error('❌ Error al incrementar contador de sesión:', errorSesion);
+                    }
+
+                    renderizarHistorialSesiones();
+                }
+
+                mostrarFeedbackAsistencia('✅ Asistencia registrada exitosamente', 'success');
+
+                return { ok: true, alumno: nombreAlumno || null };
+
+            } catch (error) {
+                console.error('❌ Error al registrar asistencia:', error);
+                mostrarFeedbackAsistencia(error.response?.data?.message || 'Error al registrar la asistencia', 'danger');
+                return { ok: false };
+            }
+        }
+
+        function registrarAsistenciaDesdeTabla(numeroControl) {
+            document.getElementById('asistencia-numero-control').value = numeroControl;
+            registrarAsistenciaPorNumeroControl(numeroControl);
+        }
+
+        async function iniciarEscaneoCamara() {
+            const tallerId = document.getElementById('select-taller-alumnos').value;
+            if (!tallerId) {
+                alert('Selecciona un taller antes de usar la cámara');
+                return;
+            }
+
+            if (typeof jsQR === 'undefined') {
+                alert('No se pudo cargar el lector QR. Recarga la página e intenta de nuevo.');
+                return;
+            }
+
+            const modal = document.getElementById('modalCamaraAsistencia');
+            const estado = document.getElementById('estado-camara-asistencia');
+            modal.style.display = 'block';
+            modal.classList.add('in');
+
+            const fechaSesion = fechaSesionContinuacion || obtenerFechaAsistenciaSeleccionada();
+            fechaSesionContinuacion = null;
+
+            if (!sesionEscaneoActual) {
+                const sesionCreada = await crearSesionEscaneo(fechaSesion);
+                if (!sesionCreada) {
+                    modal.classList.remove('in');
+                    modal.style.display = 'none';
+                    return;
+                }
+            }
+
+            if (cameraStream) {
+                estado.textContent = 'Sesión activa. Escaneando códigos QR...';
+                if (!scanAnimationFrame) {
+                    escanearQRDesdeCamara();
+                }
+                return;
+            }
+
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' },
+                    audio: false
+                });
+
+                const video = document.getElementById('video-asistencia');
+                video.srcObject = cameraStream;
+                video.setAttribute('playsinline', true);
+
+                estado.textContent = 'Sesión activa. Escaneando códigos QR...';
+                video.onloadedmetadata = () => {
+                    video.play();
+                    escanearQRDesdeCamara();
+                };
+
+            } catch (error) {
+                console.error('❌ Error al iniciar cámara:', error);
+                estado.textContent = 'No se pudo acceder a la cámara.';
+                alert('No se pudo abrir la cámara. Verifica permisos en tu navegador.');
+            }
+        }
+
+        async function detenerEscaneoCamara() {
+            const modal = document.getElementById('modalCamaraAsistencia');
+            const video = document.getElementById('video-asistencia');
+            const estado = document.getElementById('estado-camara-asistencia');
+
+            if (scanAnimationFrame) {
+                cancelAnimationFrame(scanAnimationFrame);
+                scanAnimationFrame = null;
+            }
+
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+
+            if (video) {
+                video.srcObject = null;
+            }
+
+            procesandoEscaneo = false;
+            ultimoNumeroControlEscaneado = '';
+            ultimoEscaneoMs = 0;
+
+            if (estado) {
+                estado.textContent = 'Sesión cerrada.';
+            }
+
+            await cerrarSesionEscaneoActual();
+
+            modal.classList.remove('in');
+            modal.style.display = 'none';
+
+            programarActualizacionPostSesion();
+        }
+
+        async function escanearQRDesdeCamara() {
+            const video = document.getElementById('video-asistencia');
+            const canvas = document.getElementById('canvas-asistencia');
+            const estado = document.getElementById('estado-camara-asistencia');
+
+            if (!video || !canvas) return;
+
+            const ctx = canvas.getContext('2d');
+
+            const loop = async () => {
+                if (!cameraStream) return;
+
+                if (procesandoEscaneo) {
+                    scanAnimationFrame = requestAnimationFrame(loop);
+                    return;
+                }
+
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                    if (code?.data) {
+                        const numeroControl = normalizarNumeroControl(code.data);
+
+                        if (numeroControl) {
+                            const ahora = Date.now();
+                            if (numeroControl === ultimoNumeroControlEscaneado && (ahora - ultimoEscaneoMs) < 2500) {
+                                scanAnimationFrame = requestAnimationFrame(loop);
+                                return;
+                            }
+
+                            procesandoEscaneo = true;
+                            ultimoNumeroControlEscaneado = numeroControl;
+                            ultimoEscaneoMs = ahora;
+
+                            estado.textContent = `Código detectado: ${numeroControl}. Registrando...`;
+                            mostrarFeedbackAsistencia(`📷 QR detectado: ${numeroControl}. Registrando asistencia...`, 'info');
+                            await registrarAsistenciaPorNumeroControl(numeroControl);
+                            estado.textContent = 'Sesión activa. Escaneando códigos QR...';
+                            procesandoEscaneo = false;
+                        }
+                    }
+                }
+
+                scanAnimationFrame = requestAnimationFrame(loop);
+            };
+
+            loop();
+        }
+        
+        // Cargar alumnos por taller
+        async function cargarAlumnosPorTaller() {
+            const tallerId = document.getElementById('select-taller-alumnos').value;
+            tallerSeleccionadoId = tallerId;
+            resumenAsistenciaCache.clear();
+            
+            if (!tallerId) {
+                document.getElementById('tabla-alumnos').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <p>Selecciona un taller para ver los alumnos inscritos</p>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('total-alumnos').textContent = '0 alumnos';
+                return;
+            }
+            
+            try {
+                document.getElementById('tabla-alumnos').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <i class="pe-7s-refresh" style="font-size: 24px;"></i>
+                            <p>Cargando alumnos...</p>
+                        </td>
+                    </tr>
+                `;
+                
+                const response = await axios.get(`${API_BASE_URL}/talleres/${tallerId}/alumnos`);
+                alumnosCompletos = response.data.data || [];
+                alumnosData = [...alumnosCompletos];
+                
+                mostrarAlumnosEnTabla(alumnosData);
+                document.getElementById('total-alumnos').textContent = `${alumnosData.length} alumno${alumnosData.length !== 1 ? 's' : ''}`;
+                await cargarHistorialSesiones();
+                
+            } catch (error) {
+                console.error('❌ Error al cargar alumnos:', error);
+                document.getElementById('tabla-alumnos').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-danger">
+                            <i class="pe-7s-attention"></i>
+                            <p>Error al cargar los alumnos inscritos</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function generarClaveResumenAsistencia(numeroControl, perfilId) {
+            const base = `${numeroControl || ''}_${perfilId || ''}`;
+            return base.replace(/[^a-zA-Z0-9_-]/g, '_');
+        }
+
+        function construirHtmlResumenAsistencia(resumen, numeroControl) {
+            const claseContenedor = resumen.faltas >= 3
+                ? 'alert alert-danger'
+                : (resumen.faltas === 0 && resumen.retardos === 0
+                    ? 'alert alert-success'
+                    : 'alert alert-warning');
+
+            const mensajeRiesgo = resumen.faltas >= 3
+                ? '<strong>⚠️ Alerta:</strong> El alumno superó el límite de 3 faltas.'
+                : (resumen.faltas === 0 && resumen.retardos === 0
+                    ? '<strong>Estado:</strong> Excelente asistencia, sin faltas ni retardos.'
+                    : (resumen.retardos >= 1
+                        ? '<strong>Estado:</strong> Tiene retardos. Requiere seguimiento.'
+                        : '<strong>Estado:</strong> Tiene faltas. Requiere seguimiento.'));
+
+            return `
+                <div class="${claseContenedor}" style="margin: 8px 0 4px 0; padding: 10px 12px;">
+                    <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px;">
+                        <span class="label label-success">Asistencias: ${resumen.asistencias}</span>
+                        <span class="label label-warning">Retardos: ${resumen.retardos}</span>
+                        <span class="label label-danger">Faltas: ${resumen.faltas}</span>
+                        <span class="label label-default">Sesiones: ${resumen.totalSesiones}</span>
+                    </div>
+                    <p style="margin: 0;">${mensajeRiesgo}</p>
+                </div>
+            `;
+        }
+
+        async function calcularResumenAsistenciaAlumno(numeroControl) {
+            const tallerId = document.getElementById('select-taller-alumnos').value;
+            if (!tallerId) {
+                return { totalSesiones: 0, asistencias: 0, retardos: 0, faltas: 0 };
+            }
+
+            if (!historialSesiones.length) {
+                await cargarHistorialSesiones();
+            }
+
+            const fechasSesiones = Array.from(new Set(
+                historialSesiones
+                    .map(item => item.fecha_sesion)
+                    .filter(Boolean)
+            ));
+
+            if (fechasSesiones.length === 0) {
+                return { totalSesiones: 0, asistencias: 0, retardos: 0, faltas: 0 };
+            }
+
+            const sesionesPorFecha = fechasSesiones.reduce((acc, fecha) => {
+                acc[fecha] = historialSesiones
+                    .filter(item => item.fecha_sesion === fecha)
+                    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                return acc;
+            }, {});
+
+            const respuestas = await Promise.all(
+                fechasSesiones.map(async (fecha) => {
+                    const response = await axios.get(`${API_BASE_URL}/talleres/${tallerId}/asistencias`, {
+                        params: { fecha_sesion: fecha }
+                    });
+
+                    return {
+                        fecha,
+                        registros: response.data.data || []
+                    };
+                })
+            );
+
+            let asistencias = 0;
+            let retardos = 0;
+            let faltas = 0;
+
+            respuestas.forEach(({ fecha, registros }) => {
+                const registroAlumno = registros.find(
+                    item => String(item.numero_control || '').trim() === String(numeroControl || '').trim()
+                );
+
+                if (!registroAlumno) {
+                    faltas += 1;
+                    return;
+                }
+
+                asistencias += 1;
+
+                const sesionesDelDia = sesionesPorFecha[fecha] || [];
+                const primeraSesion = sesionesDelDia[0] || null;
+                const corteRetardo = primeraSesion?.closed_at ? new Date(primeraSesion.closed_at) : null;
+                const fechaRegistro = new Date(registroAlumno.created_at);
+
+                if (
+                    corteRetardo &&
+                    !Number.isNaN(corteRetardo.getTime()) &&
+                    !Number.isNaN(fechaRegistro.getTime()) &&
+                    fechaRegistro > corteRetardo
+                ) {
+                    retardos += 1;
+                }
+            });
+
+            return {
+                totalSesiones: fechasSesiones.length,
+                asistencias,
+                retardos,
+                faltas
+            };
+        }
+
+        async function togglePanelAsistenciaAlumno(numeroControl, perfilId) {
+            const clave = generarClaveResumenAsistencia(numeroControl, perfilId);
+            const filaPanel = document.getElementById(`resumen-asistencia-row-${clave}`);
+            const contenedor = document.getElementById(`resumen-asistencia-${clave}`);
+
+            if (!filaPanel || !contenedor) return;
+
+            const estaVisible = filaPanel.style.display === 'table-row';
+            if (estaVisible) {
+                filaPanel.style.display = 'none';
+                return;
+            }
+
+            filaPanel.style.display = 'table-row';
+
+            if (resumenAsistenciaCache.has(clave)) {
+                contenedor.innerHTML = construirHtmlResumenAsistencia(
+                    resumenAsistenciaCache.get(clave),
+                    numeroControl
+                );
+                return;
+            }
+
+            contenedor.innerHTML = '<div class="alert alert-info" style="margin: 8px 0 4px 0;">Cargando resumen de asistencia...</div>';
+
+            try {
+                const resumen = await calcularResumenAsistenciaAlumno(numeroControl);
+                resumenAsistenciaCache.set(clave, resumen);
+                contenedor.innerHTML = construirHtmlResumenAsistencia(resumen, numeroControl);
+            } catch (error) {
+                console.error('❌ Error al calcular resumen de asistencia:', error);
+                contenedor.innerHTML = '<div class="alert alert-danger" style="margin: 8px 0 4px 0;">No se pudo cargar el resumen de asistencia.</div>';
+            }
+        }
+
+        async function exportarAsistenciasExcel(fechaSesionParam = null, sesionId = null) {
+            const formatearFechaSesion = (fechaValor) => {
+                if (!fechaValor) return '-';
+
+                if (typeof fechaValor === 'string') {
+                    const partes = fechaValor.match(/^(\d{4})-(\d{2})-(\d{2})/);
+                    if (partes) {
+                        const [, anio, mes, dia] = partes;
+                        const fechaLocal = new Date(Number(anio), Number(mes) - 1, Number(dia));
+                        return fechaLocal.toLocaleDateString('es-MX', {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric'
+                        });
+                    }
+                }
+
+                const fecha = new Date(fechaValor);
+                if (Number.isNaN(fecha.getTime())) return String(fechaValor);
+
+                return fecha.toLocaleDateString('es-MX', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            };
+
+            const tallerId = document.getElementById('select-taller-alumnos').value;
+            const fechaSesion = fechaSesionParam || document.getElementById('asistencia-fecha').value;
+
+            if (!tallerId) {
+                alert('Selecciona un taller para exportar asistencias');
+                return;
+            }
+
+            if (!fechaSesion) {
+                alert('Selecciona la fecha de asistencia');
+                return;
+            }
+
+            try {
+                const sesion = sesionId
+                    ? historialSesiones.find(item => item.id === sesionId)
+                    : null;
+
+                const sesionesMismaFecha = historialSesiones
+                    .filter(item => item.fecha_sesion === fechaSesion)
+                    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+                const primeraSesion = sesionesMismaFecha[0] || null;
+                const corteRetardo = primeraSesion?.closed_at ? new Date(primeraSesion.closed_at) : null;
+
+                const response = await axios.get(`${API_BASE_URL}/talleres/${tallerId}/asistencias`, {
+                    params: { fecha_sesion: fechaSesion }
+                });
+
+                const asistencias = response.data.data || [];
+
+                if (asistencias.length === 0) {
+                    alert('No hay asistencias registradas para esa fecha');
+                    return;
+                }
+
+                const rows = asistencias.map(item => {
+                    const nombre = `${item.nombre} ${item.apellido_paterno || ''} ${item.apellido_materno || ''}`.trim();
+                    const fechaRegistro = new Date(item.created_at);
+                    const hora = new Date(item.created_at).toLocaleTimeString('es-MX', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    let estado = 'A tiempo';
+                    if (corteRetardo && !Number.isNaN(corteRetardo.getTime()) && !Number.isNaN(fechaRegistro.getTime())) {
+                        estado = fechaRegistro > corteRetardo ? 'Retardo' : 'A tiempo';
+                    } else if (sesion?.created_at) {
+                        const inicioSesionActual = new Date(sesion.created_at);
+                        if (!Number.isNaN(inicioSesionActual.getTime()) && !Number.isNaN(fechaRegistro.getTime())) {
+                            estado = fechaRegistro >= inicioSesionActual ? 'Retardo' : 'A tiempo';
+                        }
+                    } else {
+                        const fechaRegistroISO = fechaRegistro.toISOString().slice(0, 10);
+                        estado = fechaRegistroISO > fechaSesion ? 'Retardo' : 'A tiempo';
+                    }
+
+                    return {
+                        'No. Control': item.numero_control,
+                        'Nombre': nombre,
+                        'Taller': item.taller_nombre || '-',
+                        'Grupo': item.grupo || '-',
+                        'Semestre': item.semestre || '-',
+                        'Fecha': formatearFechaSesion(item.fecha_sesion),
+                        'Hora registro': hora,
+                        'Estado': estado
+                    };
+                });
+
+                const worksheet = XLSX.utils.json_to_sheet(rows);
+
+                const encabezados = Object.keys(rows[0] || {});
+                worksheet['!cols'] = encabezados.map((encabezado) => {
+                    const longitudMaxima = rows.reduce((maximo, fila) => {
+                        const valor = fila[encabezado] == null ? '' : String(fila[encabezado]);
+                        return Math.max(maximo, valor.length);
+                    }, encabezado.length);
+
+                    return {
+                        wch: Math.min(Math.max(longitudMaxima + 2, 12), 50)
+                    };
+                });
+
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Asistencias');
+
+                const nombreArchivo = `asistencias_${fechaSesion}.xlsx`;
+                XLSX.writeFile(workbook, nombreArchivo);
+
+            } catch (error) {
+                console.error('❌ Error al exportar asistencias:', error);
+                alert(error.response?.data?.message || 'Error al exportar asistencias');
+            }
+        }
+        
+        // Mostrar alumnos en la tabla
+        function mostrarAlumnosEnTabla(alumnos) {
+            const tbody = document.getElementById('tabla-alumnos');
+            
+            if (!alumnos || alumnos.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <i class="pe-7s-info"></i>
+                            <p>No hay alumnos inscritos en este taller</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = alumnos.map(alumno => {
+                const nombreCompleto = `${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno || ''}`.trim();
+                const claveResumen = generarClaveResumenAsistencia(alumno.numero_control, alumno.perfil_id);
+                
+                return `
+                    <tr>
+                        <td><strong>${alumno.numero_control}</strong></td>
+                        <td>${nombreCompleto}</td>
+                        <td>${alumno.grupo || '-'}</td>
+                        <td>${alumno.semestre || '-'}</td>
+                        <td>${alumno.email || '-'}</td>
+                        <td>${alumno.telefono || '-'}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="togglePanelAsistenciaAlumno('${alumno.numero_control}', '${alumno.perfil_id}')" title="Ver resumen de asistencia">
+                                <i class="pe-7s-note2"></i> Asistencia
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="verInformacionEmergencia('${alumno.perfil_id}')" title="Ver información de emergencia">
+                                <i class="pe-7s-attention"></i> Emergencia
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="resumen-asistencia-row-${claveResumen}" style="display:none;">
+                        <td colspan="7" id="resumen-asistencia-${claveResumen}"></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // Buscar alumno
+        function buscarAlumno() {
+            const busqueda = document.getElementById('buscar-alumno').value.toLowerCase().trim();
+            
+            if (!busqueda) {
+                alumnosData = [...alumnosCompletos];
+            } else {
+                alumnosData = alumnosCompletos.filter(alumno => {
+                    const nombreCompleto = `${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno || ''}`.toLowerCase();
+                    const numeroControl = (alumno.numero_control || '').toLowerCase();
+                    const email = (alumno.email || '').toLowerCase();
+                    
+                    return nombreCompleto.includes(busqueda) || 
+                           numeroControl.includes(busqueda) || 
+                           email.includes(busqueda);
+                });
+            }
+            
+            mostrarAlumnosEnTabla(alumnosData);
+            document.getElementById('total-alumnos').textContent = `${alumnosData.length} alumno${alumnosData.length !== 1 ? 's' : ''}`;
+        }
+        
+        // Ver información de emergencia
+        function verInformacionEmergencia(perfilId) {
+            const alumno = alumnosCompletos.find(a => a.perfil_id === perfilId);
+            if (!alumno) return;
+            
+            // Llenar modal con datos del alumno
+            const nombreCompleto = `${alumno.nombre} ${alumno.apellido_paterno} ${alumno.apellido_materno || ''}`.trim();
+            document.getElementById('emergencia-nombre-alumno').textContent = nombreCompleto;
+            document.getElementById('emergencia-datos-alumno').textContent = 
+                `${alumno.numero_control} | ${alumno.grupo || '-'} | Semestre ${alumno.semestre || '-'}`;
+            
+            // Información de contacto de emergencia
+            document.getElementById('emergencia-contacto-nombre').textContent = 
+                alumno.contacto_emergencia_nombre || 'No registrado';
+            document.getElementById('emergencia-contacto-telefono').textContent = 
+                alumno.contacto_emergencia_telefono || 'No registrado';
+            document.getElementById('emergencia-contacto-relacion').textContent = 
+                alumno.contacto_emergencia_relacion || 'No registrado';
+            
+            // Información médica
+            document.getElementById('emergencia-tipo-sangre').textContent = 
+                alumno.tipo_sangre || 'No registrado';
+            document.getElementById('emergencia-alergias').textContent = 
+                alumno.alergias || 'Ninguna registrada';
+            document.getElementById('emergencia-medicamentos').textContent = 
+                alumno.medicamentos || 'Ninguno registrado';
+            document.getElementById('emergencia-condiciones').textContent = 
+                alumno.condiciones_medicas || 'Ninguna registrada';
+            
+            // Mostrar modal
+            document.getElementById('modalEmergencia').style.display = 'block';
+            document.querySelector('#modalEmergencia .modal-dialog').parentElement.classList.add('in');
+            document.querySelector('#modalEmergencia .modal-dialog').parentElement.style.display = 'block';
+        }
+        
+        // Cerrar modal de emergencia
+        function cerrarModalEmergencia() {
+            document.getElementById('modalEmergencia').style.display = 'none';
+            document.querySelector('#modalEmergencia .modal-dialog').parentElement.classList.remove('in');
+        }
+    </script>
+    <!-- Chatbot Script -->
+    <script src="js/chatbot.js"></script>
+
+</html>
