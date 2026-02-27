@@ -79,6 +79,12 @@
                         <p>Alumnos inscritos</p>
                     </a>
                 </li>
+                <li id="menu-asistencias">
+                    <a href="javascript:void(0)" onclick="mostrarSeccion('asistencias')">
+                        <i class="pe-7s-id"></i>
+                        <p>Asistencias</p>
+                    </a>
+                </li>
                  <li>
                     <a href="#" onclick="cerrarSesion()">
                         <i class="pe-7s-power"></i>
@@ -164,30 +170,6 @@
                                             <div class="form-group">
                                                 <label>Teléfono</label>
                                                 <input type="tel" id="telefono" class="form-control" placeholder="Número de teléfono personal">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Contacto de emergencia</label>
-                                                <input type="text" id="contacto_emergencia" class="form-control" placeholder="Nombre del contacto">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Número de emergencia</label>
-                                                <input type="tel" id="telefono_emergencia" class="form-control" placeholder="Teléfono del contacto">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Dirección</label>
-                                                <input type="text" id="direccion" class="form-control" placeholder="Dirección completa">
                                             </div>
                                         </div>
                                     </div>
@@ -382,71 +364,6 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="well" style="margin-bottom: 15px;">
-                                            <h5 style="margin-top: 0;"><i class="pe-7s-date"></i> Sesiones</h5>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group" style="margin-bottom: 0;">
-                                                        <label>Fecha de sesión</label>
-                                                        <input type="date" class="form-control" id="asistencia-fecha">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group" style="margin-bottom: 0;">
-                                                        <label>&nbsp;</label>
-                                                        <button class="btn btn-warning btn-fill btn-block" onclick="actualizarListaAsistencia()">
-                                                            <i class="pe-7s-refresh"></i> Actualizar
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr style="margin: 12px 0;">
-                                            <div class="table-responsive">
-                                                <table class="table table-condensed table-hover" style="margin-bottom: 0;">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Sesión</th>
-                                                            <th>Fecha</th>
-                                                            <th>Registrados</th>
-                                                            <th>Estado</th>
-                                                            <th>Acción</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="historial-sesiones-body">
-                                                        <tr>
-                                                            <td colspan="5" class="text-center text-muted">Aún no hay sesiones registradas.</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Número de control</label>
-                                            <input type="text" class="form-control" id="asistencia-numero-control" placeholder="Ej: 2250405123">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>&nbsp;</label>
-                                            <button class="btn btn-info btn-fill btn-block" onclick="iniciarEscaneoCamara()">
-                                                <i class="pe-7s-camera"></i> Registrar con cámara
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="asistencia-feedback" class="alert" style="display:none; margin-top: 8px;"></div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
                                         <div class="table-responsive">
                                             <table class="table table-hover table-striped">
                                                 <thead>
@@ -478,38 +395,90 @@
             </div>
         </div>
 
-
-        <footer class="footer">
+        <!-- Sección Asistencias -->
+        <div class="content" id="seccion-asistencias" style="display: none;">
             <div class="container-fluid">
-                <nav class="pull-left">
-                    <ul>
-                        <li>
-                            <a href="#">
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Company
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Portfolio
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                               Blog
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <p class="copyright pull-right">
-                    &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://www.creative-tim.com">Creative Tim</a>, made with love for a better web
-                </p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Control de Asistencias</h4>
+                                <p class="category">Selecciona el taller y registra asistencias</p>
+                            </div>
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Seleccionar Taller</label>
+                                            <select class="form-control" id="select-taller-asistencia" onchange="alCambiarTallerAsistencia()">
+                                                <option value="">Selecciona un taller...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Fecha de sesión</label>
+                                            <input type="date" class="form-control" id="asistencia-fecha">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <button class="btn btn-warning btn-fill btn-block" onclick="actualizarListaAsistencia()">
+                                                <i class="pe-7s-refresh"></i> Reabrir sesión
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Número de control</label>
+                                            <input type="text" class="form-control" id="asistencia-numero-control" placeholder="Ej: 2250405123">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <button class="btn btn-info btn-fill btn-block" onclick="iniciarEscaneoCamara()">
+                                                <i class="pe-7s-camera"></i> Registrar con cámara
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="asistencia-feedback" class="alert" style="display:none; margin-top: 8px;"></div>
+                                    </div>
+                                </div>
+
+                                <hr style="margin: 12px 0;">
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-hover" style="margin-bottom: 0;">
+                                        <thead>
+                                            <tr>
+                                                <th>Sesión</th>
+                                                <th>Fecha</th>
+                                                <th>Registrados</th>
+                                                <th>Estado</th>
+                                                <th>Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="historial-sesiones-body">
+                                            <tr>
+                                                <td colspan="5" class="text-center text-muted">Aún no hay sesiones registradas.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </footer>
+        </div>
 
     </div>
 </div>
@@ -664,9 +633,9 @@
                 <video id="video-asistencia" autoplay playsinline style="width: 100%; max-height: 420px; background: #000; border-radius: 8px;"></video>
                 <canvas id="canvas-asistencia" style="display:none;"></canvas>
                 <p id="estado-camara-asistencia" class="text-info" style="margin-top: 10px;">Iniciando cámara...</p>
+                <p id="metricas-camara-asistencia" class="text-muted" style="margin-top: 4px; font-size: 12px;"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" onclick="iniciarEscaneoCamara()">Iniciar sesión</button>
                 <button type="button" class="btn btn-default" onclick="detenerEscaneoCamara()">Cerrar sesión</button>
             </div>
         </div>
@@ -714,12 +683,14 @@
             document.getElementById('seccion-calendario').style.display = 'none';
             document.getElementById('seccion-avisos').style.display = 'none';
             document.getElementById('seccion-alumnos').style.display = 'none';
+            document.getElementById('seccion-asistencias').style.display = 'none';
             
             // Remover clase active de todos los menús
             document.getElementById('menu-perfil').classList.remove('active');
             document.getElementById('menu-calendario').classList.remove('active');
             document.getElementById('menu-avisos').classList.remove('active');
             document.getElementById('menu-alumnos').classList.remove('active');
+            document.getElementById('menu-asistencias').classList.remove('active');
             
             // Mostrar la sección seleccionada y activar su menú
             document.getElementById('seccion-' + seccion).style.display = 'block';
@@ -748,7 +719,14 @@
             if (seccion === 'alumnos') {
                 setTimeout(() => {
                     cargarTalleresParaAlumnos();
+                }, 100);
+            }
+
+            if (seccion === 'asistencias') {
+                setTimeout(() => {
+                    cargarTalleresParaAlumnos();
                     prepararFechaAsistenciaInstructor();
+                    cargarHistorialSesiones();
                 }, 100);
             }
         }
@@ -967,8 +945,13 @@
         async function crearEvento(eventoData) {
             try {
                 const response = await axios.post(`${API_BASE_URL}/calendario`, eventoData);
-                
-                alert('✅ Evento creado exitosamente');
+
+                const emailInfo = response.data?.email;
+                if (emailInfo?.sent) {
+                    alert(`✅ Evento creado y enviado por correo a ${emailInfo.recipients || 0} alumno(s)`);
+                } else {
+                    alert('✅ Evento creado exitosamente (sin envío de correo)');
+                }
                 calendar.refetchEvents();
                 
             } catch (error) {
@@ -1083,9 +1066,6 @@ ${evento.extendedProps.description ? 'Descripción: ' + evento.extendedProps.des
                 const apellidosInput = document.getElementById('apellidos');
                 const especialidadInput = document.getElementById('especialidad');
                 const telefonoInput = document.getElementById('telefono');
-                const contactoInput = document.getElementById('contacto_emergencia');
-                const telefonoEmergenciaInput = document.getElementById('telefono_emergencia');
-                const direccionInput = document.getElementById('direccion');
                 const descripcionInput = document.getElementById('descripcion');
                 
                 if (nombreInput) nombreInput.value = perfil.perfil?.nombre || '';
@@ -1093,9 +1073,6 @@ ${evento.extendedProps.description ? 'Descripción: ' + evento.extendedProps.des
                     `${perfil.perfil?.apellido_paterno || ''} ${perfil.perfil?.apellido_materno || ''}`.trim();
                 if (especialidadInput) especialidadInput.value = perfil.perfil?.especialidad || '';
                 if (telefonoInput) telefonoInput.value = perfil.perfil?.telefono || '';
-                if (contactoInput) contactoInput.value = perfil.perfil?.contacto_emergencia || '';
-                if (telefonoEmergenciaInput) telefonoEmergenciaInput.value = perfil.perfil?.telefono_emergencia || '';
-                if (direccionInput) direccionInput.value = perfil.perfil?.direccion || '';
                 if (descripcionInput) descripcionInput.value = perfil.perfil?.descripcion || '';
                 
                 // Mostrar información en la tarjeta del lado derecho
@@ -1128,9 +1105,6 @@ ${evento.extendedProps.description ? 'Descripción: ' + evento.extendedProps.des
             const apellidosCompletos = document.getElementById('apellidos').value.trim();
             const especialidad = document.getElementById('especialidad').value.trim();
             const telefono = document.getElementById('telefono').value.trim();
-            const contacto_emergencia = document.getElementById('contacto_emergencia').value.trim();
-            const telefono_emergencia = document.getElementById('telefono_emergencia').value.trim();
-            const direccion = document.getElementById('direccion').value.trim();
             const descripcion = document.getElementById('descripcion').value.trim();
             
             // Validar campos requeridos
@@ -1156,9 +1130,6 @@ ${evento.extendedProps.description ? 'Descripción: ' + evento.extendedProps.des
                     apellido_materno,
                     especialidad,
                     telefono,
-                    contacto_emergencia,
-                    telefono_emergencia,
-                    direccion,
                     descripcion
                 });
                 
@@ -1195,7 +1166,7 @@ ${evento.extendedProps.description ? 'Descripción: ' + evento.extendedProps.des
         async function cargarAvisos() {
             try {
                 const response = await axios.get(`${API_BASE_URL}/avisos/mis-avisos`, {
-                    params: { limit: 100 }
+                    params: { limit: 100, activo: true }
                 });
                 
                 avisosData = response.data.data || [];
@@ -1364,12 +1335,24 @@ ${evento.extendedProps.description ? 'Descripción: ' + evento.extendedProps.des
                 
                 if (avisoId) {
                     // Actualizar aviso existente
-                    await axios.put(`${API_BASE_URL}/avisos/${avisoId}`, data);
-                    alert('✅ Aviso actualizado exitosamente');
+                    const response = await axios.put(`${API_BASE_URL}/avisos/${avisoId}`, data);
+                    const emailInfo = response.data?.email;
+
+                    if (emailInfo?.sent) {
+                        alert(`✅ Aviso actualizado y enviado por correo a ${emailInfo.recipients || 0} alumno(s)`);
+                    } else {
+                        alert('✅ Aviso actualizado exitosamente (sin envío de correo)');
+                    }
                 } else {
                     // Crear nuevo aviso
-                    await axios.post(`${API_BASE_URL}/avisos`, data);
-                    alert('✅ Aviso creado exitosamente');
+                    const response = await axios.post(`${API_BASE_URL}/avisos`, data);
+                    const emailInfo = response.data?.email;
+
+                    if (emailInfo?.sent) {
+                        alert(`✅ Aviso creado y enviado por correo a ${emailInfo.recipients || 0} alumno(s)`);
+                    } else {
+                        alert('✅ Aviso creado exitosamente (sin envío de correo)');
+                    }
                 }
                 
                 cerrarModalAviso();
@@ -1377,10 +1360,11 @@ ${evento.extendedProps.description ? 'Descripción: ' + evento.extendedProps.des
                 
             } catch (error) {
                 console.error('❌ Error al guardar aviso:', error);
-                alert(error.response?.data?.message || 'Error al guardar el aviso');
+                const detalleValidacion = error.response?.data?.details?.[0]?.message;
+                alert(detalleValidacion || error.response?.data?.message || 'Error al guardar el aviso');
             }
         }
-        
+
         // Ver detalle del aviso
         function verDetalleAviso(avisoId) {
             const aviso = avisosData.find(a => a.id === avisoId);
@@ -1440,11 +1424,57 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
         let procesandoEscaneo = false;
         let ultimoNumeroControlEscaneado = '';
         let ultimoEscaneoMs = 0;
+        let ultimoIntentoDecodeMs = 0;
         let timerActualizacionPostSesion = null;
         let historialSesiones = [];
         let sesionEscaneoActual = null;
         let fechaSesionContinuacion = null;
         const resumenAsistenciaCache = new Map();
+        const intervaloEscaneoMs = 70;
+        const cooldownQrRepetidoMs = 1300;
+        const maxDimensionEscaneo = 960;
+        let timerRefrescoRapidoEscaneo = null;
+        let ultimoRefrescoRapidoEscaneoMs = 0;
+        const metricaEscaner = {
+            inicioMs: 0,
+            frames: 0,
+            intentos: 0,
+            exitos: 0,
+            ultimoRenderMs: 0
+        };
+
+        function reiniciarMetricasEscaner() {
+            metricaEscaner.inicioMs = Date.now();
+            metricaEscaner.frames = 0;
+            metricaEscaner.intentos = 0;
+            metricaEscaner.exitos = 0;
+            metricaEscaner.ultimoRenderMs = 0;
+        }
+
+        function renderizarMetricasEscaner() {
+            const nodo = document.getElementById('metricas-camara-asistencia');
+            if (!nodo || !metricaEscaner.inicioMs) return;
+
+            const ahora = Date.now();
+            if (ahora - metricaEscaner.ultimoRenderMs < 900) return;
+
+            const segundos = Math.max((ahora - metricaEscaner.inicioMs) / 1000, 1);
+            const fps = (metricaEscaner.frames / segundos).toFixed(1);
+            const intentosPorSeg = (metricaEscaner.intentos / segundos).toFixed(1);
+            const efectividad = metricaEscaner.intentos
+                ? ((metricaEscaner.exitos / metricaEscaner.intentos) * 100).toFixed(1)
+                : '0.0';
+
+            nodo.textContent = `FPS: ${fps} · intentos/s: ${intentosPorSeg} · lecturas: ${metricaEscaner.exitos}/${metricaEscaner.intentos} (${efectividad}%)`;
+            metricaEscaner.ultimoRenderMs = ahora;
+        }
+
+        function obtenerRegionCentralEscaneo(ancho, alto) {
+            const lado = Math.floor(Math.min(ancho, alto) * 0.7);
+            const x = Math.max(0, Math.floor((ancho - lado) / 2));
+            const y = Math.max(0, Math.floor((alto - lado) / 2));
+            return { x, y, lado };
+        }
 
         function prepararFechaAsistenciaInstructor() {
             const input = document.getElementById('asistencia-fecha');
@@ -1452,6 +1482,27 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
             if (!input.value) {
                 input.value = new Date().toISOString().slice(0, 10);
             }
+        }
+
+        function obtenerTallerIdAsistencia() {
+            const selectAsistencia = document.getElementById('select-taller-asistencia');
+            if (selectAsistencia?.value) {
+                return selectAsistencia.value;
+            }
+
+            const selectAlumnos = document.getElementById('select-taller-alumnos');
+            return selectAlumnos?.value || '';
+        }
+
+        function alCambiarTallerAsistencia() {
+            const selectAsistencia = document.getElementById('select-taller-asistencia');
+            const selectAlumnos = document.getElementById('select-taller-alumnos');
+
+            if (selectAsistencia && selectAlumnos) {
+                selectAlumnos.value = selectAsistencia.value;
+            }
+
+            cargarHistorialSesiones();
         }
         
         // Cargar talleres para seleccionar
@@ -1461,7 +1512,11 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
                 const talleres = response.data.data || [];
                 
                 const select = document.getElementById('select-taller-alumnos');
+                const selectAsistencia = document.getElementById('select-taller-asistencia');
                 select.innerHTML = '<option value="">Selecciona un taller...</option>';
+                if (selectAsistencia) {
+                    selectAsistencia.innerHTML = '<option value="">Selecciona un taller...</option>';
+                }
 
                 if (talleres.length === 0) {
                     document.getElementById('tabla-alumnos').innerHTML = `
@@ -1484,10 +1539,21 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
                     option.value = taller.id;
                     option.textContent = `${taller.nombre} (${taller.categoria})`;
                     select.appendChild(option);
+
+                    if (selectAsistencia) {
+                        const optionAsistencia = document.createElement('option');
+                        optionAsistencia.value = taller.id;
+                        optionAsistencia.textContent = `${taller.nombre} (${taller.categoria})`;
+                        selectAsistencia.appendChild(optionAsistencia);
+                    }
                 });
 
                 if (!select.value) {
                     select.value = talleres[0].id;
+                }
+
+                if (selectAsistencia && !selectAsistencia.value) {
+                    selectAsistencia.value = select.value;
                 }
 
                 await cargarAlumnosPorTaller();
@@ -1561,6 +1627,125 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
             }, 4500);
         }
 
+        function mostrarAlertaRegistroVisible(mensaje, tipo = 'success') {
+            let alerta = document.getElementById('alerta-registro-visible');
+
+            if (!alerta) {
+                alerta = document.createElement('div');
+                alerta.id = 'alerta-registro-visible';
+                alerta.style.position = 'fixed';
+                alerta.style.top = '20px';
+                alerta.style.left = '50%';
+                alerta.style.transform = 'translateX(-50%)';
+                alerta.style.zIndex = '12000';
+                alerta.style.minWidth = '320px';
+                alerta.style.maxWidth = '90vw';
+                alerta.style.padding = '14px 18px';
+                alerta.style.borderRadius = '8px';
+                alerta.style.boxShadow = '0 8px 20px rgba(0,0,0,0.25)';
+                alerta.style.fontSize = '15px';
+                alerta.style.fontWeight = '600';
+                alerta.style.textAlign = 'center';
+                alerta.style.display = 'none';
+                document.body.appendChild(alerta);
+            }
+
+            if (tipo === 'danger') {
+                alerta.style.backgroundColor = '#f2dede';
+                alerta.style.color = '#a94442';
+                alerta.style.border = '1px solid #ebccd1';
+            } else if (tipo === 'warning') {
+                alerta.style.backgroundColor = '#fcf8e3';
+                alerta.style.color = '#8a6d3b';
+                alerta.style.border = '1px solid #faebcc';
+            } else {
+                alerta.style.backgroundColor = '#dff0d8';
+                alerta.style.color = '#3c763d';
+                alerta.style.border = '1px solid #d6e9c6';
+            }
+
+            alerta.textContent = mensaje;
+            alerta.style.display = 'block';
+
+            clearTimeout(mostrarAlertaRegistroVisible._timer);
+            mostrarAlertaRegistroVisible._timer = setTimeout(() => {
+                alerta.style.display = 'none';
+            }, 2600);
+        }
+
+        function normalizarFechaISO(fechaValor) {
+            if (!fechaValor) return '';
+
+            if (typeof fechaValor === 'string') {
+                const match = fechaValor.match(/^(\d{4}-\d{2}-\d{2})/);
+                if (match?.[1]) {
+                    return match[1];
+                }
+            }
+
+            const fecha = new Date(fechaValor);
+            if (Number.isNaN(fecha.getTime())) return '';
+
+            const anio = fecha.getFullYear();
+            const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+            const dia = String(fecha.getDate()).padStart(2, '0');
+
+            return `${anio}-${mes}-${dia}`;
+        }
+
+        function formatearFechaSesionVista(fechaValor) {
+            const fechaISO = normalizarFechaISO(fechaValor);
+            if (!fechaISO) return fechaValor || '-';
+
+            const [anio, mes, dia] = fechaISO.split('-');
+            const fechaLocal = new Date(Number(anio), Number(mes) - 1, Number(dia));
+
+            return fechaLocal.toLocaleDateString('es-MX', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        function obtenerCorteRetardoSesiones(sesiones = []) {
+            if (!Array.isArray(sesiones) || !sesiones.length) return null;
+
+            const cierresValidos = sesiones
+                .map(item => item?.closed_at)
+                .filter(Boolean)
+                .map(valor => new Date(valor))
+                .filter(fecha => !Number.isNaN(fecha.getTime()))
+                .sort((a, b) => a.getTime() - b.getTime());
+
+            return cierresValidos[0] || null;
+        }
+
+        function parsearFechaHora(valor) {
+            if (!valor) return null;
+
+            if (valor instanceof Date) {
+                return Number.isNaN(valor.getTime()) ? null : valor;
+            }
+
+            const texto = String(valor).trim();
+            if (!texto) return null;
+
+            const normalizada = texto.includes('T')
+                ? texto
+                : texto.replace(' ', 'T');
+
+            const fecha = new Date(normalizada);
+            if (!Number.isNaN(fecha.getTime())) return fecha;
+
+            const timestamp = Date.parse(normalizada);
+            if (!Number.isNaN(timestamp)) {
+                return new Date(timestamp);
+            }
+
+            return null;
+        }
+
+
         function renderizarHistorialSesiones() {
             const tbody = document.getElementById('historial-sesiones-body');
             if (!tbody) return;
@@ -1581,15 +1766,18 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
                 return `
                     <tr>
                         <td>#${index + 1}</td>
-                        <td>${sesion.fecha_sesion}</td>
+                        <td>${formatearFechaSesionVista(sesion.fecha_sesion)}</td>
                         <td>${sesion.registrados || 0}</td>
                         <td><span class="${estadoClass}">${estadoTexto}</span></td>
                         <td>
                             <button class="btn btn-xs btn-warning" onclick="reanudarSesionHistorial('${sesion.id}')">
-                                <i class="pe-7s-refresh"></i> Actualizar
+                                <i class="pe-7s-refresh"></i> Reabrir sesión
                             </button>
                             <button class="btn btn-xs btn-success" onclick="exportarAsistenciasExcel('${sesion.fecha_sesion}', '${sesion.id}')" style="margin-left: 6px;">
                                 <i class="pe-7s-download"></i> Excel
+                            </button>
+                            <button class="btn btn-xs btn-danger" onclick="eliminarSesionHistorial('${sesion.id}')" style="margin-left: 6px;">
+                                <i class="pe-7s-trash"></i> Eliminar
                             </button>
                         </td>
                     </tr>
@@ -1600,7 +1788,7 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
         function normalizarSesionApi(sesion) {
             return {
                 id: sesion.id,
-                fecha_sesion: sesion.fecha_sesion,
+                fecha_sesion: normalizarFechaISO(sesion.fecha_sesion),
                 registrados: Number(sesion.registrados ?? sesion.total_registrados ?? 0),
                 estado: sesion.estado || 'Cerrada',
                 created_at: sesion.created_at,
@@ -1610,7 +1798,7 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
         }
 
         async function cargarHistorialSesiones() {
-            const tallerId = document.getElementById('select-taller-alumnos')?.value;
+            const tallerId = obtenerTallerIdAsistencia();
             if (!tallerId) {
                 historialSesiones = [];
                 sesionEscaneoActual = null;
@@ -1633,7 +1821,7 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
         }
 
         async function crearSesionEscaneo(fechaSesion) {
-            const tallerId = document.getElementById('select-taller-alumnos')?.value;
+            const tallerId = obtenerTallerIdAsistencia();
             if (!tallerId) return null;
 
             try {
@@ -1656,7 +1844,7 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
         async function cerrarSesionEscaneoActual() {
             if (!sesionEscaneoActual) return;
 
-            const tallerId = document.getElementById('select-taller-alumnos')?.value;
+            const tallerId = obtenerTallerIdAsistencia();
 
             try {
                 if (tallerId) {
@@ -1684,22 +1872,80 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
             const sesion = historialSesiones.find(item => item.id === sesionId);
             if (!sesion) return;
 
-            const fechaInput = document.getElementById('asistencia-fecha');
-            if (fechaInput) {
-                fechaInput.value = sesion.fecha_sesion;
+            const tallerId = obtenerTallerIdAsistencia();
+            if (!tallerId) {
+                mostrarFeedbackAsistencia('Selecciona un taller antes de reanudar sesión.', 'warning');
+                return;
             }
 
-            fechaSesionContinuacion = sesion.fecha_sesion;
-            sesionEscaneoActual = null;
-            iniciarEscaneoCamara();
+            const fechaSesion = normalizarFechaISO(sesion.fecha_sesion);
+
+            const fechaInput = document.getElementById('asistencia-fecha');
+            if (fechaInput && fechaSesion) {
+                fechaInput.value = fechaSesion;
+            }
+
+            fechaSesionContinuacion = fechaSesion || sesion.fecha_sesion;
+
+            try {
+                const response = await axios.put(
+                    `${API_BASE_URL}/talleres/${tallerId}/sesiones-asistencia/${sesion.id}`,
+                    {
+                        estado: 'activa',
+                        total_registrados: sesion.registrados || 0
+                    }
+                );
+
+                const sesionActualizada = normalizarSesionApi(response.data?.data || sesion);
+                sesionEscaneoActual = sesionActualizada;
+                historialSesiones = historialSesiones.map(item =>
+                    item.id === sesionActualizada.id ? sesionActualizada : item
+                );
+                renderizarHistorialSesiones();
+
+                iniciarEscaneoCamara();
+            } catch (error) {
+                console.error('❌ Error al reanudar sesión de historial:', error);
+                mostrarFeedbackAsistencia('No se pudo reabrir la sesión seleccionada.', 'danger');
+            }
+        }
+
+        async function eliminarSesionHistorial(sesionId) {
+            const sesion = historialSesiones.find(item => item.id === sesionId);
+            if (!sesion) return;
+
+            if (sesionEscaneoActual && sesionEscaneoActual.id === sesionId) {
+                mostrarFeedbackAsistencia('No puedes eliminar una sesión activa. Ciérrala primero.', 'warning');
+                return;
+            }
+
+            const tallerId = obtenerTallerIdAsistencia();
+            if (!tallerId) {
+                mostrarFeedbackAsistencia('Selecciona un taller antes de eliminar sesión.', 'warning');
+                return;
+            }
+
+            const fechaVista = formatearFechaSesionVista(sesion.fecha_sesion);
+            const confirmar = confirm(`¿Seguro que deseas eliminar la sesión del ${fechaVista}?`);
+            if (!confirmar) return;
+
+            try {
+                await axios.delete(`${API_BASE_URL}/talleres/${tallerId}/sesiones-asistencia/${sesionId}`);
+                historialSesiones = historialSesiones.filter(item => item.id !== sesionId);
+                renderizarHistorialSesiones();
+                mostrarFeedbackAsistencia('Sesión eliminada correctamente.', 'success');
+            } catch (error) {
+                console.error('❌ Error al eliminar sesión de historial:', error);
+                mostrarFeedbackAsistencia(error.response?.data?.message || 'No se pudo eliminar la sesión.', 'danger');
+            }
         }
 
         async function actualizarListaAsistencia(silencioso = false) {
-            const tallerId = document.getElementById('select-taller-alumnos')?.value;
+            const tallerId = obtenerTallerIdAsistencia();
 
             if (!tallerId) {
                 if (!silencioso) {
-                    mostrarFeedbackAsistencia('Selecciona un taller antes de actualizar.', 'warning');
+                    mostrarFeedbackAsistencia('Selecciona un taller antes de reabrir sesión.', 'warning');
                 }
                 return;
             }
@@ -1709,12 +1955,12 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
                 await cargarHistorialSesiones();
                 renderizarHistorialSesiones();
                 if (!silencioso) {
-                    mostrarFeedbackAsistencia('🔄 Lista actualizada correctamente.', 'success');
+                    mostrarFeedbackAsistencia('🔄 Sesión reabierta y lista sincronizada.', 'success');
                 }
             } catch (error) {
                 console.error('❌ Error al actualizar lista de asistencia:', error);
                 if (!silencioso) {
-                    mostrarFeedbackAsistencia('No se pudo actualizar la lista.', 'danger');
+                    mostrarFeedbackAsistencia('No se pudo reabrir la sesión.', 'danger');
                 }
             }
         }
@@ -1728,12 +1974,33 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
             // Refresco diferido para cubrir registros que lleguen con retraso
             timerActualizacionPostSesion = setTimeout(() => {
                 actualizarListaAsistencia(true);
-                mostrarFeedbackAsistencia('Se actualizó la lista después de cerrar sesión de escaneo.', 'info');
+                mostrarFeedbackAsistencia('Lista sincronizada después de cerrar sesión de escaneo.', 'info');
             }, 1800);
         }
 
+        function programarRefrescoRapidoTrasEscaneo() {
+            const ahora = Date.now();
+            const refrescoMinimoMs = 1800;
+
+            if ((ahora - ultimoRefrescoRapidoEscaneoMs) >= refrescoMinimoMs) {
+                ultimoRefrescoRapidoEscaneoMs = ahora;
+                cargarAlumnosPorTaller().catch((error) => {
+                    console.error('❌ Error al refrescar alumnos tras escaneo:', error);
+                });
+                return;
+            }
+
+            clearTimeout(timerRefrescoRapidoEscaneo);
+            timerRefrescoRapidoEscaneo = setTimeout(() => {
+                ultimoRefrescoRapidoEscaneoMs = Date.now();
+                cargarAlumnosPorTaller().catch((error) => {
+                    console.error('❌ Error al refrescar alumnos tras escaneo:', error);
+                });
+            }, 900);
+        }
+
         async function registrarAsistenciaPorNumeroControl(numeroControlDirecto = null) {
-            const tallerId = document.getElementById('select-taller-alumnos').value;
+            const tallerId = obtenerTallerIdAsistencia();
             const fechaSesion = obtenerFechaAsistenciaSeleccionada();
             const inputNumeroControl = document.getElementById('asistencia-numero-control');
             const numeroControl = normalizarNumeroControl(numeroControlDirecto || inputNumeroControl.value);
@@ -1751,16 +2018,18 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
             try {
                 const response = await axios.post(`${API_BASE_URL}/talleres/${tallerId}/asistencias`, {
                     numero_control: numeroControl,
-                    fecha_sesion: fechaSesion
+                    fecha_sesion: fechaSesion,
+                    sesion_asistencia_id: sesionEscaneoActual?.id || null
                 });
 
                 const alumno = response.data?.data?.alumno;
                 const nombreAlumno = alumno
                     ? `${alumno.nombre || ''} ${alumno.apellido_paterno || ''} ${alumno.apellido_materno || ''}`.trim()
                     : null;
+                const etiquetaAlumno = nombreAlumno || `No. Control: ${numeroControl}`;
 
                 inputNumeroControl.value = '';
-                await cargarAlumnosPorTaller();
+                programarRefrescoRapidoTrasEscaneo();
 
                 if (sesionEscaneoActual) {
                     try {
@@ -1780,13 +2049,13 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
                     renderizarHistorialSesiones();
                 }
 
-                mostrarFeedbackAsistencia('✅ Asistencia registrada exitosamente', 'success');
+                mostrarAlertaRegistroVisible(`✅ Asistencia registrada: ${etiquetaAlumno}`, 'success');
 
                 return { ok: true, alumno: nombreAlumno || null };
 
             } catch (error) {
                 console.error('❌ Error al registrar asistencia:', error);
-                mostrarFeedbackAsistencia(error.response?.data?.message || 'Error al registrar la asistencia', 'danger');
+                mostrarAlertaRegistroVisible(error.response?.data?.message || 'Error al registrar la asistencia', 'danger');
                 return { ok: false };
             }
         }
@@ -1797,7 +2066,7 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
         }
 
         async function iniciarEscaneoCamara() {
-            const tallerId = document.getElementById('select-taller-alumnos').value;
+            const tallerId = obtenerTallerIdAsistencia();
             if (!tallerId) {
                 alert('Selecciona un taller antes de usar la cámara');
                 return;
@@ -1810,8 +2079,14 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
 
             const modal = document.getElementById('modalCamaraAsistencia');
             const estado = document.getElementById('estado-camara-asistencia');
+            const metricas = document.getElementById('metricas-camara-asistencia');
             modal.style.display = 'block';
             modal.classList.add('in');
+            if (metricas) {
+                metricas.textContent = 'Preparando métricas de escaneo...';
+            }
+            reiniciarMetricasEscaner();
+            ultimoIntentoDecodeMs = 0;
 
             const fechaSesion = fechaSesionContinuacion || obtenerFechaAsistenciaSeleccionada();
             fechaSesionContinuacion = null;
@@ -1835,13 +2110,32 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
 
             try {
                 cameraStream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' },
+                    video: {
+                        facingMode: { ideal: 'environment' },
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    },
                     audio: false
                 });
 
                 const video = document.getElementById('video-asistencia');
                 video.srcObject = cameraStream;
                 video.setAttribute('playsinline', true);
+
+                const trackVideo = cameraStream.getVideoTracks?.()[0];
+                if (trackVideo?.applyConstraints) {
+                    try {
+                        await trackVideo.applyConstraints({
+                            advanced: [
+                                { focusMode: 'continuous' },
+                                { exposureMode: 'continuous' },
+                                { whiteBalanceMode: 'continuous' }
+                            ]
+                        });
+                    } catch (_) {
+                        // Algunos navegadores no soportan estas constraints
+                    }
+                }
 
                 estado.textContent = 'Sesión activa. Escaneando códigos QR...';
                 video.onloadedmetadata = () => {
@@ -1860,6 +2154,7 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
             const modal = document.getElementById('modalCamaraAsistencia');
             const video = document.getElementById('video-asistencia');
             const estado = document.getElementById('estado-camara-asistencia');
+            const metricas = document.getElementById('metricas-camara-asistencia');
 
             if (scanAnimationFrame) {
                 cancelAnimationFrame(scanAnimationFrame);
@@ -1878,9 +2173,15 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
             procesandoEscaneo = false;
             ultimoNumeroControlEscaneado = '';
             ultimoEscaneoMs = 0;
+            ultimoIntentoDecodeMs = 0;
+            clearTimeout(timerRefrescoRapidoEscaneo);
+            timerRefrescoRapidoEscaneo = null;
 
             if (estado) {
                 estado.textContent = 'Sesión cerrada.';
+            }
+            if (metricas) {
+                metricas.textContent = '';
             }
 
             await cerrarSesionEscaneoActual();
@@ -1898,37 +2199,66 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
 
             if (!video || !canvas) return;
 
-            const ctx = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true }) || canvas.getContext('2d');
 
             const loop = async () => {
                 if (!cameraStream) return;
+                metricaEscaner.frames += 1;
 
                 if (procesandoEscaneo) {
+                    renderizarMetricasEscaner();
                     scanAnimationFrame = requestAnimationFrame(loop);
                     return;
                 }
 
+                const ahora = Date.now();
+                if ((ahora - ultimoIntentoDecodeMs) < intervaloEscaneoMs) {
+                    renderizarMetricasEscaner();
+                    scanAnimationFrame = requestAnimationFrame(loop);
+                    return;
+                }
+                ultimoIntentoDecodeMs = ahora;
+
                 if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
+                    const anchoVideo = video.videoWidth;
+                    const altoVideo = video.videoHeight;
+                    const escala = Math.min(1, maxDimensionEscaneo / Math.max(anchoVideo, altoVideo));
+
+                    canvas.width = Math.max(1, Math.floor(anchoVideo * escala));
+                    canvas.height = Math.max(1, Math.floor(altoVideo * escala));
                     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+                    const region = obtenerRegionCentralEscaneo(canvas.width, canvas.height);
+                    const imageDataCentro = ctx.getImageData(region.x, region.y, region.lado, region.lado);
+                    metricaEscaner.intentos += 1;
+
+                    let code = jsQR(imageDataCentro.data, imageDataCentro.width, imageDataCentro.height, {
+                        inversionAttempts: 'attemptBoth'
+                    });
+
+                    if (!code && (metricaEscaner.intentos % 4 === 0)) {
+                        const imageDataCompleta = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        metricaEscaner.intentos += 1;
+                        code = jsQR(imageDataCompleta.data, imageDataCompleta.width, imageDataCompleta.height, {
+                            inversionAttempts: 'attemptBoth'
+                        });
+                    }
 
                     if (code?.data) {
+                        metricaEscaner.exitos += 1;
                         const numeroControl = normalizarNumeroControl(code.data);
 
                         if (numeroControl) {
-                            const ahora = Date.now();
-                            if (numeroControl === ultimoNumeroControlEscaneado && (ahora - ultimoEscaneoMs) < 2500) {
+                            const marcaTiempo = Date.now();
+                            if (numeroControl === ultimoNumeroControlEscaneado && (marcaTiempo - ultimoEscaneoMs) < cooldownQrRepetidoMs) {
+                                renderizarMetricasEscaner();
                                 scanAnimationFrame = requestAnimationFrame(loop);
                                 return;
                             }
 
                             procesandoEscaneo = true;
                             ultimoNumeroControlEscaneado = numeroControl;
-                            ultimoEscaneoMs = ahora;
+                            ultimoEscaneoMs = marcaTiempo;
 
                             estado.textContent = `Código detectado: ${numeroControl}. Registrando...`;
                             mostrarFeedbackAsistencia(`📷 QR detectado: ${numeroControl}. Registrando asistencia...`, 'info');
@@ -1938,6 +2268,8 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
                         }
                     }
                 }
+
+                renderizarMetricasEscaner();
 
                 scanAnimationFrame = requestAnimationFrame(loop);
             };
@@ -2028,7 +2360,7 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
         }
 
         async function calcularResumenAsistenciaAlumno(numeroControl) {
-            const tallerId = document.getElementById('select-taller-alumnos').value;
+            const tallerId = document.getElementById('select-taller-alumnos')?.value || obtenerTallerIdAsistencia();
             if (!tallerId) {
                 return { totalSesiones: 0, asistencias: 0, retardos: 0, faltas: 0 };
             }
@@ -2084,8 +2416,7 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
                 asistencias += 1;
 
                 const sesionesDelDia = sesionesPorFecha[fecha] || [];
-                const primeraSesion = sesionesDelDia[0] || null;
-                const corteRetardo = primeraSesion?.closed_at ? new Date(primeraSesion.closed_at) : null;
+                const corteRetardo = obtenerCorteRetardoSesiones(sesionesDelDia);
                 const fechaRegistro = new Date(registroAlumno.created_at);
 
                 if (
@@ -2168,7 +2499,7 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
                 });
             };
 
-            const tallerId = document.getElementById('select-taller-alumnos').value;
+            const tallerId = obtenerTallerIdAsistencia();
             const fechaSesion = fechaSesionParam || document.getElementById('asistencia-fecha').value;
 
             if (!tallerId) {
@@ -2190,11 +2521,15 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
                     .filter(item => item.fecha_sesion === fechaSesion)
                     .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
-                const primeraSesion = sesionesMismaFecha[0] || null;
-                const corteRetardo = primeraSesion?.closed_at ? new Date(primeraSesion.closed_at) : null;
+                const corteRetardo = obtenerCorteRetardoSesiones(sesionesMismaFecha);
+
+                const paramsConsulta = { fecha_sesion: fechaSesion };
+                if (sesion?.id) {
+                    paramsConsulta.sesion_asistencia_id = sesion.id;
+                }
 
                 const response = await axios.get(`${API_BASE_URL}/talleres/${tallerId}/asistencias`, {
-                    params: { fecha_sesion: fechaSesion }
+                    params: paramsConsulta
                 });
 
                 const asistencias = response.data.data || [];
@@ -2206,22 +2541,29 @@ Estado: ${aviso.activo ? 'Activo' : 'Inactivo'}
 
                 const rows = asistencias.map(item => {
                     const nombre = `${item.nombre} ${item.apellido_paterno || ''} ${item.apellido_materno || ''}`.trim();
-                    const fechaRegistro = new Date(item.created_at);
-                    const hora = new Date(item.created_at).toLocaleTimeString('es-MX', {
+                    const fechaRegistro = parsearFechaHora(item.created_at);
+                    const hora = (fechaRegistro || new Date(item.created_at)).toLocaleTimeString('es-MX', {
                         hour: '2-digit',
                         minute: '2-digit'
                     });
 
                     let estado = 'A tiempo';
-                    if (corteRetardo && !Number.isNaN(corteRetardo.getTime()) && !Number.isNaN(fechaRegistro.getTime())) {
+                    if (sesion?.closed_at) {
+                        const cierreSesion = parsearFechaHora(sesion.closed_at);
+                        if (cierreSesion && fechaRegistro) {
+                            estado = fechaRegistro > cierreSesion ? 'Retardo' : 'A tiempo';
+                        }
+                    } else if (corteRetardo && fechaRegistro) {
                         estado = fechaRegistro > corteRetardo ? 'Retardo' : 'A tiempo';
                     } else if (sesion?.created_at) {
-                        const inicioSesionActual = new Date(sesion.created_at);
-                        if (!Number.isNaN(inicioSesionActual.getTime()) && !Number.isNaN(fechaRegistro.getTime())) {
+                        const inicioSesionActual = parsearFechaHora(sesion.created_at);
+                        if (inicioSesionActual && fechaRegistro) {
                             estado = fechaRegistro >= inicioSesionActual ? 'Retardo' : 'A tiempo';
                         }
                     } else {
-                        const fechaRegistroISO = fechaRegistro.toISOString().slice(0, 10);
+                        const fechaRegistroISO = fechaRegistro
+                            ? fechaRegistro.toISOString().slice(0, 10)
+                            : '';
                         estado = fechaRegistroISO > fechaSesion ? 'Retardo' : 'A tiempo';
                     }
 

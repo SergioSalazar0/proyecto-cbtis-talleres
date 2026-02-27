@@ -3,11 +3,55 @@ class ChatbotAssistant {
         this.isOpen = false;
         this.messages = [];
         this.isLoading = false;
-        this.apiUrl = 'http://localhost:5000/api/chatbot/chat';
-        this.clearSessionUrl = 'http://localhost:5000/api/chatbot/clear-session';
+        const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:5000/api';
+        this.apiUrl = `${baseUrl}/chatbot/chat`;
+        this.clearSessionUrl = `${baseUrl}/chatbot/clear-session`;
         this.sessionId = null;
+        this.quickActionsInitialized = false;
         
         this.init();
+    }
+
+    getPageContext() {
+        const page = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+
+        const sectionActiva = document.querySelector('.content-section[style*="display: block"], .content[style*="display: block"], .content-section.active');
+        const section = sectionActiva?.id || null;
+
+        const selectoresTaller = [
+            '#select-taller-alumnos',
+            '#evento-taller',
+            '#filtroTallerEvento',
+            '#select-taller',
+            '#taller-select'
+        ];
+
+        let selectedTallerId = null;
+        let selectedTallerNombre = null;
+
+        for (const selector of selectoresTaller) {
+            const select = document.querySelector(selector);
+            if (select && select.value) {
+                selectedTallerId = select.value;
+                selectedTallerNombre = select.options?.[select.selectedIndex]?.text || null;
+                break;
+            }
+        }
+
+        const token = localStorage.getItem('token');
+        let roleHint = 'visitante';
+        if (page.includes('dashboard-admin')) roleHint = 'admin';
+        else if (page.includes('dashboard-instructor')) roleHint = 'instructor';
+        else if (page.includes('dashboard-user')) roleHint = 'alumno';
+        else if (token) roleHint = 'autenticado';
+
+        return {
+            page,
+            section,
+            selectedTallerId,
+            selectedTallerNombre,
+            roleHint
+        };
     }
 
     init() {
@@ -35,7 +79,10 @@ class ChatbotAssistant {
                     <h3>Soporte CBTis 258</h3>
                     <p>Asistente IA disponible</p>
                 </div>
-                <button id="chatbot-close" class="chatbot-close" aria-label="Cerrar chat">✕</button>
+                <div class="chatbot-header-actions">
+                    <button id="chatbot-reset" class="chatbot-reset" aria-label="Nueva conversación">↻</button>
+                    <button id="chatbot-close" class="chatbot-close" aria-label="Cerrar chat">✕</button>
+                </div>
             </div>
             <div id="chatbot-messages" class="chatbot-messages"></div>
             <div class="chatbot-input-container">
@@ -69,11 +116,13 @@ class ChatbotAssistant {
     attachEventListeners() {
         const bubble = document.getElementById('chatbot-bubble');
         const closeBtn = document.getElementById('chatbot-close');
+        const resetBtn = document.getElementById('chatbot-reset');
         const sendBtn = document.getElementById('chatbot-send');
         const input = document.getElementById('chatbot-input');
 
         bubble.addEventListener('click', () => this.toggleChat());
         closeBtn.addEventListener('click', () => this.toggleChat());
+        resetBtn.addEventListener('click', () => this.resetConversation());
         sendBtn.addEventListener('click', () => this.sendMessage());
         
         input.addEventListener('keypress', (e) => {
@@ -120,7 +169,119 @@ class ChatbotAssistant {
         `;
         
         messagesContainer.appendChild(welcomeMessage);
+        this.renderQuickActions();
         this.scrollToBottom();
+    }
+
+    getQuickActions() {
+        const context = this.getPageContext();
+        const role = context.roleHint;
+
+        if (role === 'admin') {
+            return [
+                'Dame un resumen de usuarios del sistema',
+                'Muéstrame talleres activos e inactivos',
+                '¿Cómo gestiono instructores y talleres?'
+            ];
+        }
+
+        if (role === 'instructor') {
+            return [
+                '¿Cuáles son mis talleres asignados?',
+                '¿Cómo registrar asistencia correctamente?',
+                'Muéstrame próximos eventos de mis talleres'
+            ];
+        }
+
+        if (role === 'alumno') {
+            return [
+                '¿En qué talleres estoy inscrito?',
+                'Muéstrame mis próximos eventos',
+                '¿Dónde veo avisos de mis talleres?'
+            ];
+        }
+
+        if (context.page.includes('login')) {
+            return [
+                'No puedo iniciar sesión',
+                '¿Cómo recupero mi contraseña?',
+                '¿Qué tipo de usuario puedo usar?'
+            ];
+        }
+
+        if (context.page.includes('register')) {
+            return [
+                '¿Cómo me registro correctamente?',
+                '¿Qué datos me van a pedir?',
+                '¿Qué hago después de registrarme?'
+            ];
+        }
+
+        return [
+            '¿Qué talleres hay disponibles?',
+            '¿Qué carreras ofrece el CBTis 258?',
+            '¿Cómo me inscribo a un taller?'
+        ];
+    }
+
+    renderQuickActions() {
+        if (this.quickActionsInitialized) return;
+
+        const messagesContainer = document.getElementById('chatbot-messages');
+        if (!messagesContainer) return;
+
+        const acciones = this.getQuickActions();
+        if (!acciones.length) return;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'chatbot-quick-actions';
+
+        acciones.forEach((texto) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'chatbot-quick-action-btn';
+            btn.textContent = texto;
+            btn.addEventListener('click', () => this.sendPresetMessage(texto));
+            wrap.appendChild(btn);
+        });
+
+        messagesContainer.appendChild(wrap);
+        this.quickActionsInitialized = true;
+    }
+
+    async sendPresetMessage(text) {
+        if (this.isLoading) return;
+        await this.sendMessageText(text);
+    }
+
+    async resetConversation() {
+        try {
+            const token = localStorage.getItem('token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) {
+                headers.Authorization = `Bearer ${token}`;
+            }
+
+            await fetch(this.clearSessionUrl, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ sessionId: this.sessionId })
+            });
+        } catch (error) {
+            console.warn('No se pudo limpiar sesión remota de chatbot:', error);
+        } finally {
+            this.sessionId = null;
+            this.quickActionsInitialized = false;
+            this.removeTypingIndicator();
+
+            const messagesContainer = document.getElementById('chatbot-messages');
+            if (messagesContainer) {
+                messagesContainer.innerHTML = '';
+            }
+
+            this.loadWelcomeMessage();
+            this.addMessage('🔄 Conversación reiniciada. ¿En qué te ayudo ahora?', 'bot');
+        }
     }
 
     async sendMessage() {
@@ -128,24 +289,37 @@ class ChatbotAssistant {
         const message = input.value.trim();
 
         if (!message || this.isLoading) return;
+        input.value = '';
+        await this.sendMessageText(message);
+    }
+
+    async sendMessageText(message) {
+        if (!message || this.isLoading) return;
 
         // Agregar mensaje del usuario
         this.addMessage(message, 'user');
-        input.value = '';
 
         // Mostrar indicador de escritura
         this.showTypingIndicator();
         this.isLoading = true;
 
         try {
+            const token = localStorage.getItem('token');
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+
+            if (token) {
+                headers.Authorization = `Bearer ${token}`;
+            }
+
             const response = await fetch(this.apiUrl, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers,
                 body: JSON.stringify({ 
                     message,
-                    sessionId: this.sessionId
+                    sessionId: this.sessionId,
+                    pageContext: this.getPageContext()
                 })
             });
 
@@ -175,7 +349,8 @@ class ChatbotAssistant {
             );
         } finally {
             this.isLoading = false;
-            document.getElementById('chatbot-input').focus();
+            const input = document.getElementById('chatbot-input');
+            if (input) input.focus();
         }
     }
 

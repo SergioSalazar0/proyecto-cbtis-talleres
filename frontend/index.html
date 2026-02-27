@@ -115,7 +115,7 @@
                      <p class="movie_text">Talleres educativos</p>
                   </div>
                </div>
-               <div class="col-sm-8 col-lg-4">
+               <div class="col-sm-12 col-lg-4">
                   <h1 class="arrival_text">¨CONOCENOS¨</h1>
                   <div class="movie_main">
                      <div class="mins_text">CBTIS 258</div>
@@ -138,6 +138,11 @@
          
             <div id="culturales" class="movies_section_2 layout_padding">
                <h2 class="letest_text">CULTURALES</h2>
+               <div class="mas-talleres-arrow-wrapper left">
+                  <button class="mas-talleres-arrow-btn" onclick="moverCarrusel('culturales', -1)" title="Ver talleres culturales anteriores">
+                     <i class="fa fa-angle-left"></i>
+                  </button>
+               </div>
                <div class="mas-talleres-arrow-wrapper">
                   <button class="mas-talleres-arrow-btn" onclick="moverCarrusel('culturales', 1)" title="Ver más talleres culturales">
                      <i class="fa fa-angle-right"></i>
@@ -178,16 +183,65 @@
                               <button class="playnow_bt" onclick="abrirModalTaller('arte')">Ver más</button>
                            </div>
                         </div>
-                        <h1 class="code_text">Arte</h1>
+                        <h1 class="code_text">MUSICA Y CANTO</h1>
                         <p class="there_text"> </p>
                         <div class="star_icon">
+                        </div>
                      </div>
+                     <div class="iamge_movies">
+                        <div class="image_3">
+                           <img src="img-actu/teatro.png" class="image" style="width:100%">
+                           <div class="middle">
+                              <button class="playnow_bt" onclick="abrirModalTaller('teatro')">Ver más</button>
+                           </div>
+                        </div>
+                        <h1 class="code_text">TEATRO</h1>
+                        <p class="there_text"> </p>
+                        <div class="star_icon"></div>
+                     </div>
+                     <div class="iamge_movies">
+                        <div class="image_3">
+                           <img src="img-actu/fotogr.png" class="image" style="width:100%">
+                           <div class="middle">
+                              <button class="playnow_bt" onclick="abrirModalTaller('fotografia')">Ver más</button>
+                           </div>
+                        </div>
+                        <h1 class="code_text">FOTOGRAFÍA Y VIDEO</h1>
+                        <p class="there_text"> </p>
+                        <div class="star_icon"></div>
+                     </div>
+                     <div class="iamge_movies">
+                        <div class="image_3">
+                           <img src="img-actu/arte1.jpg" class="image" style="width:100%">
+                           <div class="middle">
+                              <button class="playnow_bt" onclick="abrirModalTaller('pintura')">Ver más</button>
+                           </div>
+                        </div>
+                        <h1 class="code_text">PINTURA Y DIBUJO</h1>
+                        <p class="there_text"> </p>
+                        <div class="star_icon"></div>
+                     </div>
+                     <div class="iamge_movies">
+                        <div class="image_3">
+                           <img src="img-actu/creacion literaria.png" class="image" style="width:100%">
+                           <div class="middle">
+                              <button class="playnow_bt" onclick="abrirModalTaller('coro')">Ver más</button>
+                           </div>
+                        </div>
+                        <h1 class="code_text">CREACION LITERARIA</h1>
+                        <p class="there_text"> </p>
+                        <div class="star_icon"></div>
                      </div>
                   </div>
                </div>
             </div>
             <div id="deportivos" class="movies_section_2 layout_padding">
                <h2 class="letest_text">DEPORTIVOS</h2>
+               <div class="mas-talleres-arrow-wrapper left">
+                  <button class="mas-talleres-arrow-btn" onclick="moverCarrusel('deportivos', -1)" title="Ver talleres deportivos anteriores">
+                     <i class="fa fa-angle-left"></i>
+                  </button>
+               </div>
                <div class="mas-talleres-arrow-wrapper">
                   <button class="mas-talleres-arrow-btn" onclick="moverCarrusel('deportivos', 1)" title="Ver más talleres deportivos">
                      <i class="fa fa-angle-right"></i>
@@ -197,7 +251,7 @@
                   <div id="carrusel-deportivos" class="iamge_movies_main carrusel-talleres">
                      <div class="iamge_movies">
                         <div class="image_3">
-                           <img src="img-actu/atle3-pica.png" class="image" style="width:100%">
+                           <img src="img-actu/atlenew.png" class="image" style="width:100%">
                            <div class="middle">
                               <button class="playnow_bt" onclick="abrirModalTaller('atletismo')">Ver más</button>
                            </div>
@@ -210,12 +264,23 @@
                      </div>
                      <div class="iamge_movies">
                         <div class="image_3">
-                           <img src="img-actu/FUT.JPG" class="image" style="width:100%">
+                           <img src="img-actu/ajedrez.png" class="image" style="width:100%">
+                           <div class="middle">
+                              <button class="playnow_bt" onclick="abrirModalTaller('ajedrez')">Ver más</button>
+                           </div>
+                        </div>
+                        <h1 class="code_text">AJEDREZ</h1>
+                        <p class="there_text"> </p>
+                        <div class="star_icon"></div>
+                     </div>
+                     <div class="iamge_movies">
+                        <div class="image_3">
+                           <img src="img-actu/futnew.png" class="image" style="width:100%">
                            <div class="middle">
                                <button class="playnow_bt" onclick="abrirModalTaller('futbol')">Ver más</button>
                            </div>
                         </div>
-                        <h1 class="code_text">FUTBOL</h1>
+                        <h1 class="code_text">FÚTBOL SOCCER</h1>
                         <p class="there_text"> </p>
                         <div class="star_icon">
                           
@@ -223,12 +288,12 @@
                      </div>
                      <div class="iamge_movies">
                         <div class="image_3">
-                           <img src="img-actu/BAS.JPG" class="image" style="width:100%">
+                           <img src="img-actu/basnew.png" class="image" style="width:100%">
                            <div class="middle">
                                <button class="playnow_bt" onclick="abrirModalTaller('basquet')">Ver más</button>
                            </div>
                         </div>
-                        <h1 class="code_text">BASQUET</h1>
+                        <h1 class="code_text">BASQUETBOL</h1>
                         <p class="there_text"></p>
                         <div class="star_icon">
                            
@@ -247,44 +312,45 @@
                           
                         </div>
                      </div>
+                     <div class="iamge_movies">
+                        <div class="image_3">
+                           <img src="img-actu/defenza personal.png" class="image" style="width:100%">
+                           <div class="middle">
+                              <button class="playnow_bt" onclick="abrirModalTaller('defensaPersonal')">Ver más</button>
+                           </div>
+                        </div>
+                        <h1 class="code_text">DEFENSA PERSONAL</h1>
+                        <p class="there_text"> </p>
+                        <div class="star_icon"></div>
+                     </div>
+                     <div class="iamge_movies">
+                        <div class="image_3">
+                           <img src="img-actu/tochitobandera.png" class="image" style="width:100%">
+                           <div class="middle">
+                              <button class="playnow_bt" onclick="abrirModalTaller('beisbol')">Ver más</button>
+                           </div>
+                        </div>
+                        <h1 class="code_text">TOCHITO BANDERA</h1>
+                        <p class="there_text"> </p>
+                        <div class="star_icon"></div>
+                     </div>
                   </div>
                </div>
             </div>
             <div id="civicos" class="movies_section_2 layout_padding">
                <h2 class="letest_text">ACTIVIDADES CÍVICAS</h2>
-               <div class="mas-talleres-arrow-wrapper">
-                  <button class="mas-talleres-arrow-btn" onclick="moverCarrusel('civicos', 1)" title="Ver más talleres cívicos">
-                     <i class="fa fa-angle-right"></i>
-                  </button>
-               </div>
-               
                <div class="movies_main">
                   <div id="carrusel-civicos" class="iamge_movies_main carrusel-talleres">
                      <div class="iamge_movies">
                         <div class="image_3">
                            <img src="img-actu/escolt-ind.jpeg" class="image" style="width:100%">
                            <div class="middle">
-                             <button class="playnow_bt" onclick="abrirModalTaller('escolta')">Ver más</button>
+                              <button class="playnow_bt" onclick="abrirModalTaller('escolta')">Ver más</button>
                            </div>
                         </div>
                         <h1 class="code_text">Escolta</h1>
                         <p class="there_text"></p>
-                        <div class="star_icon">
-                    
-                        </div>
-                     </div>
-                    <div class="iamge_movies">
-                        <div class="image_3">
-                           <img src="img-actu/escolt.jpg" class="image" style="width:100%">
-                           <div class="middle">
-                               <button class="playnow_bt" onclick="abrirModalTaller('escolta')">Ver más</button>
-                           </div>
-                        </div>
-                        <h1 class="code_text">Escolta</h1>
-                        <p class="there_text"> </p>
-                        <div class="star_icon">
-                          
-                        </div>
+                        <div class="star_icon"></div>
                      </div>
                      <div class="iamge_movies">
                         <div class="image_3">
@@ -294,32 +360,12 @@
                            </div>
                         </div>
                         <h1 class="code_text">BANDA DE GUERRA</h1>
-                        <p class="there_text"> </p>
-                        <div class="star_icon">
-                      
-                        </div>
-                     </div>
-                     <div class="iamge_movies">
-                        <div class="image_3">
-                           <img src="img-actu/ba.jpeg" class="image" style="width:100%">
-                                     <div class="middle">
-                              <button class="playnow_bt" onclick="abrirModalTaller('banda')">Ver más</button>
-                           </div>
-                        <h1 class="code_text">BANDA DE GUERRA</h1>
-                        <p class="there_text"> </p>
-                        <div class="star_icon">
-                          
-                        </div>
-                     </div>
-                        </div>
-                     </div>
-                     
-                        </div>
+                        <p class="there_text"></p>
+                        <div class="star_icon"></div>
                      </div>
                   </div>
                </div>
             </div>
-          
          </div>
       </div>
       <!-- movies section end -->
@@ -369,7 +415,7 @@
       <!-- copyright section start -->
       <div class="copyright_section">
          <div class="container">
-            <div class="copyright_text">Copyright 2024 todos los derechos reservados por <a href="desing.html">3°A Programacion CBTis 258</a></div>
+            <div class="copyright_text">Copyright 2024 todos los derechos reservados por <a href="desing.html">6°A Programacion CBTis 258</a></div>
          </div>
       </div>
       <!-- copyright section end -->
@@ -477,84 +523,151 @@
 
          const talleres = {
             danza: {
-               titulo: 'DANZA',
+               titulo: 'DANZA Y BAILE',
                imagen: 'img-actu/danza1.jpg',
                descripcion: 'Explora el arte del movimiento y la expresión corporal. Aprende diversos estilos de danza y desarrolla tu creatividad artística mientras mejoras tu condición física y coordinación.',
-               horario: 'Lunes a Viernes: 3:00 PM - 5:00 PM',
-               ubicacion: 'Salón de Danza - Edificio Cultural',
-               instructor: 'Por asignar',
+               horario: '9:30 AM',
+               ubicacion: 'Explanada',
+               instructor: 'Miguel Garza',
                cupo: '25 estudiantes'
             },
             oratoria: {
-               titulo: 'ORATORIA',
+               titulo: 'ORATORIA Y DECLAMACION',
                imagen: 'img-actu/ora-3.jpeg',
-               descripcion: 'Desarrolla tus habilidades de comunicación y expresión oral. Aprende técnicas de oratoria, debate y presentaciones en público para desenvolverte con confianza en cualquier situación.',
-               horario: 'Martes y Jueves: 2:00 PM - 4:00 PM',
-               ubicacion: 'Aula 201 - Edificio Principal',
-               instructor: 'Por asignar',
+               descripcion: 'Desarrolla tu expresión oral y dominio escénico mediante técnicas de oratoria y declamación para hablar con seguridad frente al público.',
+               horario: '10:00 AM',
+               ubicacion: 'Aula 20',
+               instructor: 'Estalla Mendez',
                cupo: '20 estudiantes'
             },
             arte: {
-               titulo: 'ARTE Y MÚSICA',
+               titulo: 'MUSICA Y CANTO',
                imagen: 'img-actu/music.jpg',
-               descripcion: 'Descubre tu talento artístico a través de la música y las artes visuales. Aprende a tocar instrumentos, técnicas de pintura, dibujo y expresión artística.',
-               horario: 'Lunes, Miércoles y Viernes: 3:00 PM - 5:00 PM',
+               descripcion: 'Desarrolla habilidades musicales y vocales en prácticas de rondalla y norteño, mejorando afinación, ritmo, interpretación y trabajo en equipo.',
+               horario: '10:00 AM (Rondalla), 11:30 AM (Norteño)',
                ubicacion: 'Salón de Música - Edificio Cultural',
-               instructor: 'Por asignar',
+               instructor: 'Fernando Cano',
                cupo: '30 estudiantes'
+            },
+            teatro: {
+               titulo: 'TEATRO',
+               imagen: 'img-actu/teatro.png',
+               descripcion: 'Desarrolla expresión corporal, improvisación y actuación escénica para fortalecer tu comunicación y trabajo en equipo.',
+               horario: 'Sábados: 10:30 AM',
+               ubicacion: 'Aula 18',
+               instructor: 'Jose Juan Coello',
+               cupo: '20 estudiantes'
+            },
+            fotografia: {
+               titulo: 'FOTOGRAFÍA Y VIDEO',
+               imagen: 'img-actu/fotogr.png',
+               descripcion: 'Aprende fundamentos de fotografía, composición e iluminación para capturar imágenes creativas en proyectos escolares.',
+               horario: '9:00 AM',
+               ubicacion: 'Aula 18',
+               instructor: 'Jose Juan Coello',
+               cupo: '18 estudiantes'
+            },
+            pintura: {
+               titulo: 'PINTURA Y DIBUJO',
+               imagen: 'img-actu/arte1.jpg',
+               descripcion: 'Explora técnicas de dibujo y pintura para desarrollar creatividad, composición y expresión artística en proyectos individuales y grupales.',
+               horario: '9:00 AM',
+               ubicacion: 'Salon multiple',
+               instructor: 'Alicia Benitez',
+               cupo: '22 estudiantes'
+            },
+            coro: {
+               titulo: 'CREACION LITERARIA',
+               imagen: 'img-actu/creacion literaria.png',
+               descripcion: 'Fortalece la escritura creativa mediante cuentos, poemas y textos literarios, trabajando redacción, estilo y expresión personal.',
+               horario: '12:00 AM',
+               ubicacion: 'Aula 18',
+               instructor: 'Jose Juan Coello',
+               cupo: '28 estudiantes'
             },
             atletismo: {
                titulo: 'ATLETISMO',
-               imagen: 'img-actu/atle3-pica.png',
+               imagen: 'img-actu/atlenew.png',
                descripcion: 'Desarrolla tu velocidad, resistencia y fuerza. Participa en disciplinas como carreras, saltos y lanzamientos mientras representas al CBTis 258 en competencias.',
-               horario: 'Lunes a Viernes: 4:00 PM - 6:00 PM',
+               horario: 'Sábados: 9:00 a 11:00 hrs.',
                ubicacion: 'Pista de Atletismo y Campo Deportivo',
-               instructor: 'Por asignar',
+               instructor: 'Saúl Martínez',
                cupo: '40 estudiantes'
             },
+            ajedrez: {
+               titulo: 'AJEDREZ',
+               imagen: 'img-actu/ajedrez.png',
+               descripcion: 'Desarrolla pensamiento estratégico, concentración y toma de decisiones a través de práctica guiada y partidas de competencia.',
+               horario: 'Sábados: 9:00 a 11:00 hrs.',
+               ubicacion: 'Aula de usos múltiples',
+               instructor: 'Jesús Pérez',
+               cupo: '22 estudiantes'
+            },
             futbol: {
-               titulo: 'FÚTBOL',
-               imagen: 'img-actu/FUT.JPG',
-               descripcion: 'Únete al equipo de fútbol del CBTis 258. Mejora tu técnica, estrategia y trabajo en equipo mientras compites en torneos interescolares.',
-               horario: 'Martes y Jueves: 4:00 PM - 6:00 PM',
+               titulo: 'FÚTBOL SOCCER',
+               imagen: 'img-actu/futnew.png',
+               descripcion: 'Úneyte al equipo de fútbol del CBTis 258. Mejora tu técnica, estrategia y trabajo en equipo mientras compites en torneos interescolares.',
+               horario: 'Sábados: 8:00 a 10:00 hrs.',
                ubicacion: 'Cancha de Fútbol Principal',
-               instructor: 'Por asignar',
-               cupo: '30 estudiantes'
+               instructor: 'Erick Torres',
+               cupo: '30 estudiantes',
+               modalScale: '1.12',
+               modalPosition: 'center center'
             },
             basquet: {
                titulo: 'BASQUETBOL',
-               imagen: 'img-actu/BAS.JPG',
+               imagen: 'img-actu/basnew.png',
                descripcion: 'Desarrolla tus habilidades en el baloncesto. Aprende técnicas de tiro, defensa, y jugadas en equipo mientras participas en competencias escolares.',
-               horario: 'Lunes y Miércoles: 4:00 PM - 6:00 PM',
+               horario: 'Sábados: 11:00 a 12:00 hrs.',
                ubicacion: 'Cancha de Basquetbol Techada',
-               instructor: 'Por asignar',
-               cupo: '25 estudiantes'
+               instructor: 'Emilio Flores',
+               cupo: '25 estudiantes',
+               modalScale: '1.1',
+               modalPosition: 'center center'
             },
             voleibol: {
                titulo: 'VOLEIBOL',
                imagen: 'img-actu/VOL.JPG',
                descripcion: 'Practica voleibol y mejora tu coordinación, reflejos y trabajo en equipo. Participa en torneos y representa a tu escuela con orgullo.',
-               horario: 'Martes y Jueves: 3:00 PM - 5:00 PM',
+               horario: 'Sábados: 8:00 a 10:00 hrs.',
                ubicacion: 'Cancha de Voleibol',
-               instructor: 'Por asignar',
+               instructor: 'Carlos Cabrera',
                cupo: '24 estudiantes'
             },
+            defensaPersonal: {
+               titulo: 'DEFENSA PERSONAL',
+               imagen: 'img-actu/defenza personal.png',
+               descripcion: 'Fortalece tu condición física y aprende técnicas de protección y reacción para situaciones de riesgo en un entorno controlado.',
+               horario: 'Sábados: 9:00 a 11:00 hrs.',
+               ubicacion: 'Domo Deportivo',
+               instructor: 'Carlos Martínez',
+               cupo: '28 estudiantes'
+            },
+            beisbol: {
+               titulo: 'TOCHITO BANDERA',
+               imagen: 'img-actu/tochitobandera.png',
+               descripcion: 'Practica tochito bandera para desarrollar velocidad, estrategia, coordinación y juego limpio en equipo.',
+               horario: 'Sábados: 11:00 a 13:00 hrs.',
+               ubicacion: 'Campo Deportivo',
+               instructor: 'Francisco Navarro',
+               cupo: '26 estudiantes'
+            },
             escolta: {
-               titulo: 'ESCOLTA',
-               imagen: 'img-actu/escolt.jpg',
+               titulo: 'Escolta',
+               imagen: 'img-actu/escolt-ind.jpeg',
                descripcion: 'Forma parte de la escolta oficial del CBTis 258. Aprende protocolo, marcha y representación en ceremonias cívicas con disciplina y honor.',
-               horario: 'Lunes a Viernes: 2:30 PM - 4:00 PM',
+               horario: 'Lunes, Miércoles y Viernes: 19:30 a 21:30 hrs.',
                ubicacion: 'Patio Cívico',
-               instructor: 'Por asignar',
+               instructor: 'Víctor Martínez',
                cupo: '15 estudiantes'
             },
             banda: {
                titulo: 'BANDA DE GUERRA',
                imagen: 'img-actu/banda-2.jpeg',
                descripcion: 'Únete a la banda de guerra y aprende a tocar instrumentos de percusión y viento. Participa en desfiles y ceremonias representando al CBTis 258.',
-               horario: 'Lunes a Jueves: 3:00 PM - 5:00 PM',
+               horario: 'Martes a Jueves: 19:00 a 21:00 hrs. | Sábados: 16:00 a 18:00 hrs.',
                ubicacion: 'Salón de Música - Área de Bandas',
-               instructor: 'Por asignar',
+               instructor: 'Ariel García',
                cupo: '35 estudiantes'
             }
          };
@@ -563,13 +676,23 @@
             const taller = talleres[tallerId];
             if (!taller) return;
 
+            const modalHeader = document.querySelector('.modal-taller-header');
+            const modalImagen = document.getElementById('modalImagen');
+
             document.getElementById('modalTitulo').textContent = taller.titulo;
-            document.getElementById('modalImagen').src = taller.imagen;
+            modalImagen.src = taller.imagen;
             document.getElementById('modalDescripcion').textContent = taller.descripcion;
             document.getElementById('modalHorario').textContent = taller.horario;
             document.getElementById('modalUbicacion').textContent = taller.ubicacion;
             document.getElementById('modalInstructor').textContent = taller.instructor;
             document.getElementById('modalCupo').textContent = taller.cupo;
+
+            modalImagen.style.setProperty('--modal-img-scale', taller.modalScale || '1.25');
+            modalImagen.style.setProperty('--modal-img-position', taller.modalPosition || 'center');
+
+            if (modalHeader) {
+               modalHeader.style.backgroundImage = `url('${taller.imagen}')`;
+            }
 
             document.getElementById('modalTaller').style.display = 'block';
             document.body.style.overflow = 'hidden';

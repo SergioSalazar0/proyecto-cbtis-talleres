@@ -6,6 +6,10 @@
   
   body {
     background-image: url("login2/logfond.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
   }
   
 .navbar-light .navbar-nav .active>.nav-link,
@@ -49,7 +53,7 @@
   }
   
   .form-register {
-    width: 400px;
+    width: min(400px, calc(100vw - 32px));
     background: #24303c;
     padding: 30px;
     margin: auto;
@@ -80,10 +84,11 @@
   }
   
   .form-register p {
-    height: 40px;
+    min-height: 40px;
     text-align: center;
     font-size: 18px;
-    line-height: 40px;
+    line-height: 1.4;
+    margin: 8px 0;
   }
   
   .form-register a {
@@ -107,3 +112,49 @@
   }
   
   h4 { color: aliceblue;}
+
+@media (max-width: 991px) {
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 16px;
+  }
+
+  .search_icon {
+    padding-left: 10px;
+    margin-top: 8px;
+  }
+
+  .form-register {
+    margin-top: 60px;
+    padding: 24px;
+  }
+}
+
+@media (max-width: 575px) {
+  .form-register {
+    margin-top: 30px;
+    padding: 18px;
+    border-radius: 8px;
+  }
+
+  .form-register h4 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .controls {
+    font-size: 16px;
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+
+  .form-register p {
+    font-size: 14px;
+  }
+
+  .form-register .botons {
+    font-size: 15px;
+    padding: 11px;
+  }
+}

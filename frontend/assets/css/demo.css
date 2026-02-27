@@ -65,3 +65,213 @@
         position: initial;
     }
 }
+
+body.dashboard-user .section-content {
+    display: none;
+}
+
+body.dashboard-user .section-content.active {
+    display: block;
+}
+
+body.dashboard-user .profile-incomplete-alert {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    animation: dashboard-user-pulse 2s infinite;
+}
+
+@keyframes dashboard-user-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+body.dashboard-user .profile-form {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+body.dashboard-user .stats-card {
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+body.dashboard-user .taller-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+}
+
+body.dashboard-user .taller-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+body.dashboard-user .btn-inscribir {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+body.dashboard-user #calendario-section #calendar {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    min-height: 560px;
+}
+
+body.dashboard-user #calendario-section .fc .fc-toolbar {
+    margin-bottom: 12px;
+    gap: 8px;
+}
+
+body.dashboard-user #calendario-section .fc .fc-toolbar-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #34495e;
+}
+
+body.dashboard-user #calendario-section .fc .fc-button {
+    border-radius: 6px;
+    border: 1px solid #dfe4ea;
+    background: #ffffff;
+    color: #495057;
+    box-shadow: none;
+    text-transform: none;
+}
+
+body.dashboard-user #calendario-section .fc .fc-button-primary:not(:disabled).fc-button-active,
+body.dashboard-user #calendario-section .fc .fc-button-primary:not(:disabled):active {
+    background: #51cbce;
+    border-color: #51cbce;
+    color: #fff;
+}
+
+body.dashboard-user #calendario-section .fc .fc-col-header-cell-cushion {
+    color: #495057;
+    font-weight: 600;
+    padding: 8px 4px;
+}
+
+body.dashboard-user #calendario-section .fc .fc-daygrid-day-number {
+    color: #6c757d;
+    font-weight: 500;
+    padding: 6px;
+}
+
+body.dashboard-user #calendario-section .fc .fc-event {
+    border-radius: 6px;
+    border: 0;
+    padding: 1px 4px;
+}
+
+@media (max-width: 767px) {
+    body.dashboard-user #calendario-section #calendar {
+        padding: 8px;
+        min-height: 480px;
+    }
+
+    body.dashboard-user #calendario-section .fc .fc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.dashboard-user #calendario-section .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+    }
+
+    body.dashboard-user #calendario-section .fc .fc-toolbar-title {
+        font-size: 18px;
+        text-align: center;
+    }
+}
+
+body.dashboard-instructor #seccion-calendario #calendar {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    min-height: 560px;
+}
+
+body.dashboard-instructor #seccion-calendario .fc .fc-toolbar {
+    margin-bottom: 12px;
+    gap: 8px;
+}
+
+body.dashboard-instructor #seccion-calendario .fc .fc-toolbar-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #34495e;
+}
+
+body.dashboard-instructor #seccion-calendario .fc .fc-button {
+    border-radius: 6px;
+    border: 1px solid #dfe4ea;
+    background: #ffffff;
+    color: #495057;
+    box-shadow: none;
+    text-transform: none;
+}
+
+body.dashboard-instructor #seccion-calendario .fc .fc-button-primary:not(:disabled).fc-button-active,
+body.dashboard-instructor #seccion-calendario .fc .fc-button-primary:not(:disabled):active {
+    background: #7a5de8;
+    border-color: #7a5de8;
+    color: #fff;
+}
+
+body.dashboard-instructor #seccion-calendario .fc .fc-col-header-cell-cushion {
+    color: #495057;
+    font-weight: 600;
+    padding: 8px 4px;
+}
+
+body.dashboard-instructor #seccion-calendario .fc .fc-daygrid-day-number {
+    color: #6c757d;
+    font-weight: 500;
+    padding: 6px;
+}
+
+body.dashboard-instructor #seccion-calendario .fc .fc-event {
+    border-radius: 6px;
+    border: 0;
+    padding: 1px 4px;
+}
+
+@media (max-width: 767px) {
+    body.dashboard-instructor #seccion-calendario #calendar {
+        padding: 8px;
+        min-height: 480px;
+    }
+
+    body.dashboard-instructor #seccion-calendario .fc .fc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.dashboard-instructor #seccion-calendario .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+    }
+
+    body.dashboard-instructor #seccion-calendario .fc .fc-toolbar-title {
+        font-size: 18px;
+        text-align: center;
+    }
+}

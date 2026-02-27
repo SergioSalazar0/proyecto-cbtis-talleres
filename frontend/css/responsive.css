@@ -263,8 +263,20 @@
     .play_icon {
         display: none;
     }
+    .arrival_section .col-sm-6,
+    .arrival_section .col-sm-12 {
+        margin-bottom: 20px;
+    }
+    .image_1,
+    .image_2 {
+        background-size: cover;
+        background-position: center;
+        min-height: 260px;
+        padding-bottom: 0;
+    }
     .jesusroch_text {
-        padding-top: 240px;
+        padding-top: 200px;
+        font-size: 18px;
     }
     .mins_text {
         width: 100%;
@@ -274,11 +286,17 @@
         font-size: 15px;
     }
     .arrival_text {
-        font-size: 40px;
+        font-size: 32px;
+        line-height: 1.2;
+        text-align: center;
     }
-    
+    .arrival_text::after {
+        display: none;
+    }
     .long_text {
         font-size: 14px;
+        line-height: 1.6;
+        text-align: left;
     }
     .movies_menu li {
         font-size: 16px;
@@ -372,16 +390,28 @@
     .play_icon {
         display: none;
     }
+    .arrival_section .col-sm-6,
+    .arrival_section .col-sm-12 {
+        margin-bottom: 16px;
+    }
+    .image_1,
+    .image_2 {
+        background-size: cover;
+        background-position: center;
+        min-height: 220px;
+        padding-bottom: 0;
+    }
     .jesusroch_text {
-        padding-top: 280px;
+        padding-top: 165px;
+        font-size: 17px;
     }
     .arrival_text {
-        font-size: 40px;
+        font-size: 28px;
+        line-height: 1.2;
+        text-align: center;
     }
     .arrival_text::after {
-        right: initial;
-        width: 80px;
-        top: 42px;
+        display: none;
     }
     .movie_main {
         display: initial;
@@ -391,6 +421,8 @@
     }
     .long_text {
         font-size: 14px;
+        line-height: 1.6;
+        text-align: left;
     }
     .movies_menu li {
         font-size: 18px;
