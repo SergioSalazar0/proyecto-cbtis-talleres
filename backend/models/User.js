@@ -334,10 +334,10 @@ class UserModel {
                 pi.nombre as instructor_nombre, pi.apellido_paterno as instructor_apellido_paterno,
                 pi.apellido_materno as instructor_apellido_materno, pi.especialidad,
                 pi.telefono as instructor_telefono,
-                pi.experiencia as instructor_descripcion,
-                NULL as instructor_contacto_emergencia,
-                NULL as instructor_telefono_emergencia,
-                NULL as instructor_direccion
+                     COALESCE(to_jsonb(pi) ->> 'descripcion', to_jsonb(pi) ->> 'experiencia') as instructor_descripcion,
+                     to_jsonb(pi) ->> 'contacto_emergencia' as instructor_contacto_emergencia,
+                     to_jsonb(pi) ->> 'telefono_emergencia' as instructor_telefono_emergencia,
+                     to_jsonb(pi) ->> 'direccion' as instructor_direccion
              FROM usuarios u
              LEFT JOIN perfiles_alumno pa ON u.id = pa.usuario_id
              LEFT JOIN perfiles_instructor pi ON u.id = pi.usuario_id
@@ -365,10 +365,10 @@ class UserModel {
                 pi.nombre as instructor_nombre, pi.apellido_paterno as instructor_apellido_paterno,
                 pi.apellido_materno as instructor_apellido_materno, pi.especialidad,
                 pi.telefono as instructor_telefono,
-                pi.experiencia as instructor_descripcion,
-                NULL as instructor_contacto_emergencia,
-                NULL as instructor_telefono_emergencia,
-                NULL as instructor_direccion
+                     COALESCE(to_jsonb(pi) ->> 'descripcion', to_jsonb(pi) ->> 'experiencia') as instructor_descripcion,
+                     to_jsonb(pi) ->> 'contacto_emergencia' as instructor_contacto_emergencia,
+                     to_jsonb(pi) ->> 'telefono_emergencia' as instructor_telefono_emergencia,
+                     to_jsonb(pi) ->> 'direccion' as instructor_direccion
              FROM usuarios u
              LEFT JOIN perfiles_alumno pa ON u.id = pa.usuario_id
              LEFT JOIN perfiles_instructor pi ON u.id = pi.usuario_id

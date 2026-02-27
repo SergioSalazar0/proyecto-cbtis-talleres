@@ -270,6 +270,10 @@ export const validateEmergencyInfo = [
  * Validaciones para avisos
  */
 export const validateAviso = [
+    body('taller_id')
+        .isUUID()
+        .withMessage('El ID del taller debe ser un UUID válido'),
+
     body('titulo')
         .isLength({ min: 5, max: 200 })
         .withMessage('El título debe tener entre 5 y 200 caracteres')
@@ -286,7 +290,7 @@ export const validateAviso = [
         .withMessage('El campo importante debe ser verdadero o falso'),
     
     body('fecha_expiracion')
-        .optional()
+        .optional({ nullable: true, checkFalsy: true })
         .isISO8601()
         .withMessage('La fecha de expiración debe ser una fecha válida (YYYY-MM-DD)')
         .custom((value) => {

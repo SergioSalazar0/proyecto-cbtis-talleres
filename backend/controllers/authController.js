@@ -537,32 +537,74 @@ class AuthController {
             let result;
 
             if (tipoUsuario === 'instructor') {
-                // Actualizar perfil de instructor
+                // Actualizar perfil de instructor de forma compatible con esquemas antiguos/nuevos
+                const columnasResult = await query(
+                    `SELECT column_name
+                     FROM information_schema.columns
+                     WHERE table_schema = 'public' AND table_name = 'perfiles_instructor'`
+                );
+
+                const columnasDisponibles = new Set(
+                    (columnasResult.rows || []).map(row => row.column_name)
+                );
+
+                const setClauses = [];
+                const params = [];
+                let paramIndex = 1;
+
+                setClauses.push(`nombre = $${paramIndex++}`);
+                params.push(nombre.trim());
+
+                setClauses.push(`apellido_paterno = $${paramIndex++}`);
+                params.push(apellido_paterno.trim());
+
+                setClauses.push(`apellido_materno = $${paramIndex++}`);
+                params.push(apellido_materno?.trim() || null);
+
+                setClauses.push(`especialidad = $${paramIndex++}`);
+                params.push(especialidad?.trim() || null);
+
+                setClauses.push(`telefono = $${paramIndex++}`);
+                params.push(telefono?.trim() || null);
+
+                const descripcionNormalizada = descripcion?.trim() || null;
+                if (columnasDisponibles.has('descripcion')) {
+                    setClauses.push(`descripcion = $${paramIndex++}`);
+                    params.push(descripcionNormalizada);
+                }
+                if (columnasDisponibles.has('experiencia')) {
+                    setClauses.push(`experiencia = $${paramIndex++}`);
+                    params.push(descripcionNormalizada);
+                }
+                if (columnasDisponibles.has('contacto_emergencia')) {
+                    setClauses.push(`contacto_emergencia = $${paramIndex++}`);
+                    params.push(contacto_emergencia?.trim() || null);
+                }
+                if (columnasDisponibles.has('telefono_emergencia')) {
+                    setClauses.push(`telefono_emergencia = $${paramIndex++}`);
+                    params.push(telefono_emergencia?.trim() || null);
+                }
+                if (columnasDisponibles.has('direccion')) {
+                    setClauses.push(`direccion = $${paramIndex++}`);
+                    params.push(direccion?.trim() || null);
+                }
+                if (columnasDisponibles.has('updated_at')) {
+                    setClauses.push('updated_at = CURRENT_TIMESTAMP');
+                }
+
+                const descripcionReturn = columnasDisponibles.has('descripcion')
+                    ? 'descripcion'
+                    : (columnasDisponibles.has('experiencia') ? 'experiencia' : 'NULL::text');
+
+                const whereParam = `$${paramIndex}`;
+                params.push(userId);
+
                 result = await query(
-                    `UPDATE perfiles_instructor 
-                     SET nombre = $1, 
-                         apellido_paterno = $2, 
-                         apellido_materno = $3, 
-                         especialidad = $4,
-                         telefono = $5,
-                         descripcion = $6,
-                         contacto_emergencia = $7,
-                         telefono_emergencia = $8,
-                         direccion = $9
-                     WHERE usuario_id = $10
-                     RETURNING id, nombre, apellido_paterno, apellido_materno, especialidad, telefono, descripcion`,
-                    [
-                        nombre.trim(), 
-                        apellido_paterno.trim(), 
-                        apellido_materno?.trim() || null, 
-                        especialidad?.trim() || null,
-                        telefono?.trim() || null,
-                        descripcion?.trim() || null,
-                        contacto_emergencia?.trim() || null,
-                        telefono_emergencia?.trim() || null,
-                        direccion?.trim() || null,
-                        userId
-                    ]
+                    `UPDATE perfiles_instructor
+                     SET ${setClauses.join(', ')}
+                     WHERE usuario_id = ${whereParam}
+                     RETURNING id, nombre, apellido_paterno, apellido_materno, especialidad, telefono, ${descripcionReturn} as descripcion`,
+                    params
                 );
             } else if (tipoUsuario === 'alumno') {
                 // Actualizar perfil de alumno

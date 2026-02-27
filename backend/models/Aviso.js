@@ -243,7 +243,7 @@ class AvisoModel {
     static async getAvisosParaAlumno(alumnoId, { limit = 10, offset = 0 } = {}) {
         const result = await query(
             `SELECT DISTINCT
-                a.id, a.titulo, a.contenido, a.importante, 
+                a.id, a.taller_id, a.titulo, a.contenido, a.importante,
                 a.fecha_publicacion, a.fecha_expiracion,
                 pi.nombre || ' ' || pi.apellido_paterno as instructor_nombre,
                 t.nombre as taller_nombre,

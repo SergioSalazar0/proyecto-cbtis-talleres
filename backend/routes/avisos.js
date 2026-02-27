@@ -82,6 +82,7 @@ router.get('/search',
 router.get('/taller/:tallerId', 
     validateUUIDParam('tallerId'),
     authenticateToken,
+    authorizeAlumnoAccess,
     validateSearchQuery,
     AvisoController.getAvisosByTaller
 );
@@ -92,6 +93,7 @@ router.get('/taller/:tallerId',
 router.get('/:id', 
     validateUUIDParam('id'),
     authenticateToken,
+    authorizeAlumnoAccess,
     AvisoController.getAvisoById
 );
 

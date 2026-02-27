@@ -14,6 +14,39 @@ import {
 } from '../middlewares/validation.js';
 
 const router = express.Router();
+let cacheCompatSesionAsistencia = {
+    checked: false,
+    enabled: false
+};
+
+async function soportaSesionAsistenciaEnAsistencias() {
+    if (cacheCompatSesionAsistencia.checked) {
+        return cacheCompatSesionAsistencia.enabled;
+    }
+
+    try {
+        const result = await query(
+            `SELECT 1
+             FROM information_schema.columns
+             WHERE table_schema = 'public'
+               AND table_name = 'asistencias'
+               AND column_name = 'sesion_asistencia_id'
+             LIMIT 1`
+        );
+
+        cacheCompatSesionAsistencia = {
+            checked: true,
+            enabled: result.rows.length > 0
+        };
+    } catch (_) {
+        cacheCompatSesionAsistencia = {
+            checked: true,
+            enabled: false
+        };
+    }
+
+    return cacheCompatSesionAsistencia.enabled;
+}
 
 function extraerNumeroControl(valorEntrada) {
     if (!valorEntrada) return '';
@@ -176,14 +209,24 @@ router.get('/:id/asistencias',
     async (req, res) => {
         try {
             const { id } = req.params;
-            const { fecha_sesion } = req.query;
+            const { fecha_sesion, sesion_asistencia_id } = req.query;
             const fecha = fecha_sesion || new Date().toISOString().slice(0, 10);
+            const usaSesionAsistencia = await soportaSesionAsistenciaEnAsistencias();
 
-            const result = await query(
-                `SELECT
+            let sql = `SELECT
                     a.id,
                     a.fecha_sesion,
-                    a.created_at,
+                    a.created_at,`;
+
+            if (usaSesionAsistencia) {
+                sql += `
+                    a.sesion_asistencia_id,`;
+            } else {
+                sql += `
+                    NULL::uuid as sesion_asistencia_id,`;
+            }
+
+            sql += `
                     pa.numero_control,
                     pa.nombre,
                     pa.apellido_paterno,
@@ -194,9 +237,20 @@ router.get('/:id/asistencias',
                  FROM asistencias a
                  INNER JOIN perfiles_alumno pa ON a.alumno_id = pa.id
                  INNER JOIN talleres t ON a.taller_id = t.id
-                 WHERE a.taller_id = $1 AND a.fecha_sesion = $2
-                 ORDER BY pa.apellido_paterno, pa.apellido_materno, pa.nombre`,
-                [id, fecha]
+                 WHERE a.taller_id = $1 AND a.fecha_sesion = $2`;
+
+            const params = [id, fecha];
+
+            if (sesion_asistencia_id && usaSesionAsistencia) {
+                sql += ' AND a.sesion_asistencia_id = $3';
+                params.push(sesion_asistencia_id);
+            }
+
+            sql += ' ORDER BY pa.apellido_paterno, pa.apellido_materno, pa.nombre';
+
+            const result = await query(
+                sql,
+                params
             );
 
             res.json({
@@ -225,7 +279,7 @@ router.post('/:id/asistencias',
     async (req, res) => {
         try {
             const { id } = req.params;
-            const { numero_control, fecha_sesion } = req.body;
+            const { numero_control, fecha_sesion, sesion_asistencia_id } = req.body;
             const numeroControlNormalizado = extraerNumeroControl(numero_control);
 
             if (!numeroControlNormalizado) {
@@ -236,6 +290,22 @@ router.post('/:id/asistencias',
             }
 
             const fecha = fecha_sesion || new Date().toISOString().slice(0, 10);
+            const usaSesionAsistencia = await soportaSesionAsistenciaEnAsistencias();
+
+            if (sesion_asistencia_id && usaSesionAsistencia) {
+                const sesionValida = await query(
+                    `SELECT id FROM sesiones_asistencia
+                     WHERE id = $1 AND taller_id = $2 AND fecha_sesion = $3`,
+                    [sesion_asistencia_id, id, fecha]
+                );
+
+                if (sesionValida.rows.length === 0) {
+                    return res.status(400).json({
+                        error: 'Sesión inválida',
+                        message: 'La sesión de asistencia no corresponde al taller o fecha seleccionados'
+                    });
+                }
+            }
 
             const alumnoResult = await query(
                 `SELECT id, nombre, apellido_paterno, apellido_materno, numero_control, grupo, semestre
@@ -266,13 +336,26 @@ router.post('/:id/asistencias',
                 });
             }
 
-            const insertResult = await query(
-                `INSERT INTO asistencias (alumno_id, taller_id, fecha_sesion, registrado_por)
-                 VALUES ($1, $2, $3, $4)
-                 ON CONFLICT (alumno_id, taller_id, fecha_sesion) DO NOTHING
-                 RETURNING id, fecha_sesion, created_at`,
-                [alumno.id, id, fecha, req.user.id]
-            );
+            let insertResult;
+
+            if (sesion_asistencia_id && usaSesionAsistencia) {
+                insertResult = await query(
+                    `INSERT INTO asistencias (alumno_id, taller_id, fecha_sesion, registrado_por, sesion_asistencia_id)
+                     VALUES ($1, $2, $3, $4, $5)
+                     ON CONFLICT (alumno_id, taller_id, fecha_sesion, sesion_asistencia_id)
+                     WHERE sesion_asistencia_id IS NOT NULL DO NOTHING
+                     RETURNING id, fecha_sesion, created_at`,
+                    [alumno.id, id, fecha, req.user.id, sesion_asistencia_id]
+                );
+            } else {
+                insertResult = await query(
+                    `INSERT INTO asistencias (alumno_id, taller_id, fecha_sesion, registrado_por)
+                     VALUES ($1, $2, $3, $4)
+                     ON CONFLICT (alumno_id, taller_id, fecha_sesion) DO NOTHING
+                     RETURNING id, fecha_sesion, created_at`,
+                    [alumno.id, id, fecha, req.user.id]
+                );
+            }
 
             if (insertResult.rows.length === 0) {
                 return res.status(409).json({
@@ -346,6 +429,40 @@ router.post('/:id/sesiones-asistencia',
             const { fecha_sesion } = req.body;
             const fecha = fecha_sesion || new Date().toISOString().slice(0, 10);
 
+            const sesionExistente = await query(
+                `SELECT id, fecha_sesion, estado, total_registrados, created_at, updated_at, closed_at
+                 FROM sesiones_asistencia
+                 WHERE taller_id = $1 AND fecha_sesion = $2
+                 ORDER BY created_at ASC
+                 LIMIT 1`,
+                [id, fecha]
+            );
+
+            if (sesionExistente.rows.length > 0) {
+                const actual = sesionExistente.rows[0];
+
+                if (actual.estado !== 'activa') {
+                    const reabierta = await query(
+                        `UPDATE sesiones_asistencia
+                         SET estado = 'activa',
+                             updated_at = CURRENT_TIMESTAMP
+                         WHERE id = $1
+                         RETURNING id, fecha_sesion, estado, total_registrados, created_at, updated_at, closed_at`,
+                        [actual.id]
+                    );
+
+                    return res.status(200).json({
+                        message: 'Ya existía una sesión para esta fecha y fue reabierta',
+                        data: mapSesionAsistencia(reabierta.rows[0])
+                    });
+                }
+
+                return res.status(200).json({
+                    message: 'Ya existe una sesión activa para esta fecha',
+                    data: mapSesionAsistencia(actual)
+                });
+            }
+
             const insertResult = await query(
                 `INSERT INTO sesiones_asistencia (taller_id, instructor_usuario_id, fecha_sesion, estado, total_registrados)
                  VALUES ($1, $2, $3, 'activa', 0)
@@ -405,8 +522,8 @@ router.put('/:id/sesiones-asistencia/:sesionId',
                  SET estado = COALESCE($1, estado),
                      total_registrados = COALESCE($2, total_registrados),
                      closed_at = CASE
-                         WHEN COALESCE($1, estado) = 'cerrada' THEN CURRENT_TIMESTAMP
-                         ELSE NULL
+                         WHEN COALESCE($1, estado) = 'cerrada' THEN COALESCE(closed_at, CURRENT_TIMESTAMP)
+                         ELSE closed_at
                      END,
                      updated_at = CURRENT_TIMESTAMP
                  WHERE id = $3 AND taller_id = $4
@@ -430,6 +547,71 @@ router.put('/:id/sesiones-asistencia/:sesionId',
             res.status(500).json({
                 error: 'Error interno del servidor',
                 message: 'Error al actualizar sesión de asistencia'
+            });
+        }
+    }
+);
+
+// @route   DELETE /api/talleres/:id/sesiones-asistencia/:sesionId
+// @desc    Eliminar sesión de asistencia
+// @access  Private - Admin, Instructor del taller
+router.delete('/:id/sesiones-asistencia/:sesionId',
+    validateUUIDParam('id'),
+    validateUUIDParam('sesionId'),
+    authenticateToken,
+    authorizeInstructorTaller('id'),
+    async (req, res) => {
+        try {
+            const { id, sesionId } = req.params;
+
+            const usaSesionAsistencia = await soportaSesionAsistenciaEnAsistencias();
+
+            const sesionResult = await query(
+                `SELECT id, fecha_sesion, estado, total_registrados, created_at, updated_at, closed_at
+                 FROM sesiones_asistencia
+                 WHERE id = $1 AND taller_id = $2`,
+                [sesionId, id]
+            );
+
+            if (sesionResult.rows.length === 0) {
+                return res.status(404).json({
+                    error: 'Sesión no encontrada',
+                    message: 'No existe la sesión de asistencia especificada'
+                });
+            }
+
+            const sesion = sesionResult.rows[0];
+
+            if (usaSesionAsistencia) {
+                await query(
+                    `DELETE FROM asistencias
+                     WHERE sesion_asistencia_id = $1`,
+                    [sesionId]
+                );
+            } else {
+                await query(
+                    `DELETE FROM asistencias
+                     WHERE taller_id = $1 AND fecha_sesion = $2`,
+                    [id, sesion.fecha_sesion]
+                );
+            }
+
+            const result = await query(
+                `DELETE FROM sesiones_asistencia
+                 WHERE id = $1 AND taller_id = $2
+                 RETURNING id, fecha_sesion, estado, total_registrados, created_at, updated_at, closed_at`,
+                [sesionId, id]
+            );
+
+            res.json({
+                message: 'Sesión y asistencias de ese día eliminadas exitosamente',
+                data: mapSesionAsistencia(result.rows[0])
+            });
+        } catch (error) {
+            console.error('❌ Error al eliminar sesión de asistencia:', error);
+            res.status(500).json({
+                error: 'Error interno del servidor',
+                message: 'Error al eliminar sesión de asistencia'
             });
         }
     }

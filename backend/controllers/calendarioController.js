@@ -1,5 +1,42 @@
 import CalendarioModel from '../models/Calendario.js';
 import { query } from '../database/config-db.js';
+import { sendBulkEmail, canSendEmails } from '../services/emailService.js';
+
+async function getAllowedTallerIdsForUser(user) {
+    if (!user || user.tipo_usuario === 'admin') {
+        return null;
+    }
+
+    if (user.tipo_usuario === 'instructor') {
+        const result = await query(
+            `SELECT t.id
+             FROM talleres t
+             INNER JOIN perfiles_instructor pi ON t.instructor_id = pi.id
+             WHERE pi.usuario_id = $1`,
+            [user.id]
+        );
+        return result.rows.map(row => row.id);
+    }
+
+    if (user.tipo_usuario === 'alumno') {
+        const result = await query(
+            `SELECT DISTINCT i.taller_id AS id
+             FROM inscripciones i
+             INNER JOIN perfiles_alumno pa ON i.alumno_id = pa.id
+             WHERE pa.usuario_id = $1
+               AND i.estado = 'activa'`,
+            [user.id]
+        );
+        return result.rows.map(row => row.id);
+    }
+
+    return [];
+}
+
+function userCanAccessTaller(allowedTallerIds, tallerId) {
+    if (allowedTallerIds === null) return true;
+    return allowedTallerIds.includes(tallerId);
+}
 
 /**
  * Controlador de calendario
@@ -12,6 +49,84 @@ import { query } from '../database/config-db.js';
  */
 
 class CalendarioController {
+    static escapeHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    static async getEmailsAlumnosInscritos(tallerId) {
+        const result = await query(
+            `SELECT DISTINCT u.email
+             FROM inscripciones i
+             INNER JOIN perfiles_alumno pa ON i.alumno_id = pa.id
+             INNER JOIN usuarios u ON pa.usuario_id = u.id
+             WHERE i.taller_id = $1
+               AND i.estado = 'activa'
+               AND u.activo = true
+               AND u.email IS NOT NULL`,
+            [tallerId]
+        );
+
+        return result.rows.map(row => row.email).filter(Boolean);
+    }
+
+    static async getNombreTaller(tallerId) {
+        const result = await query('SELECT nombre FROM talleres WHERE id = $1 LIMIT 1', [tallerId]);
+        return result.rows[0]?.nombre || 'Taller';
+    }
+
+    static async notificarRecordatorioPorCorreo({ tallerId, titulo, descripcion, fechaEvento, tipoEvento }) {
+        try {
+            if (!canSendEmails()) {
+                return { sent: false, reason: 'EMAIL_DISABLED_OR_NOT_CONFIGURED' };
+            }
+
+            const [correos, nombreTaller] = await Promise.all([
+                CalendarioController.getEmailsAlumnosInscritos(tallerId),
+                CalendarioController.getNombreTaller(tallerId)
+            ]);
+
+            if (!correos.length) {
+                return { sent: false, reason: 'NO_RECIPIENTS' };
+            }
+
+            const fechaFormateada = new Date(fechaEvento).toLocaleString('es-MX', {
+                dateStyle: 'full',
+                timeStyle: 'short'
+            });
+
+            const safeTitulo = CalendarioController.escapeHtml(titulo);
+            const safeDescripcion = CalendarioController.escapeHtml(descripcion || '').replace(/\n/g, '<br>');
+            const safeTipo = CalendarioController.escapeHtml(tipoEvento || 'evento');
+            const subject = `[CBTIS 258] Recordatorio: ${titulo}`;
+            const text = `Taller: ${nombreTaller}\nEvento: ${titulo}\nTipo: ${tipoEvento || 'evento'}\nFecha: ${fechaFormateada}${descripcion ? `\n\nDescripción: ${descripcion}` : ''}`;
+            const html = `
+                <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #1f2937;">
+                    <h2 style="margin-bottom: 8px;">Nuevo recordatorio del taller ${CalendarioController.escapeHtml(nombreTaller)}</h2>
+                    <p style="margin: 0 0 8px 0;"><strong>Evento:</strong> ${safeTitulo}</p>
+                    <p style="margin: 0 0 8px 0;"><strong>Tipo:</strong> ${safeTipo}</p>
+                    <p style="margin: 0 0 12px 0;"><strong>Fecha:</strong> ${CalendarioController.escapeHtml(fechaFormateada)}</p>
+                    ${descripcion ? `<div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:12px;">${safeDescripcion}</div>` : ''}
+                    <p style="margin-top: 14px; color: #6b7280;">Este mensaje fue enviado automáticamente por el sistema de talleres CBTIS 258.</p>
+                </div>
+            `;
+
+            return await sendBulkEmail({
+                recipients: correos,
+                subject,
+                text,
+                html
+            });
+        } catch (error) {
+            console.error('⚠️ Error al enviar recordatorio por correo:', error.message);
+            return { sent: false, reason: 'SEND_ERROR' };
+        }
+    }
+
     /**
      * Obtener fechas importantes de un taller
      */
@@ -33,6 +148,14 @@ class CalendarioController {
                 limit: parseInt(limit),
                 offset: parseInt(offset)
             };
+
+            const allowedTallerIds = await getAllowedTallerIdsForUser(req.user);
+            if (!userCanAccessTaller(allowedTallerIds, tallerId)) {
+                return res.status(403).json({
+                    error: 'Acceso denegado',
+                    message: 'No tienes permisos para ver el calendario de este taller'
+                });
+            }
 
             const fechas = await CalendarioModel.findByTaller(tallerId, options);
 
@@ -171,6 +294,14 @@ class CalendarioController {
                 });
             }
 
+            const allowedTallerIds = await getAllowedTallerIdsForUser(req.user);
+            if (!userCanAccessTaller(allowedTallerIds, fecha.taller_id)) {
+                return res.status(403).json({
+                    error: 'Acceso denegado',
+                    message: 'No tienes permisos para ver esta fecha importante'
+                });
+            }
+
             // Verificar permisos de acceso
             if (req.user.tipo_usuario === 'instructor') {
                 // Verificar que es el instructor de la fecha
@@ -262,12 +393,30 @@ class CalendarioController {
 
             const nuevaFecha = await CalendarioModel.create(fechaData);
 
+            const emailResult = await CalendarioController.notificarRecordatorioPorCorreo({
+                tallerId: taller_id,
+                titulo,
+                descripcion,
+                fechaEvento: fecha_evento,
+                tipoEvento: tipo_evento || 'evento'
+            });
+
             res.status(201).json({
                 message: 'Fecha importante creada exitosamente',
-                data: nuevaFecha
+                data: nuevaFecha,
+                email: {
+                    sent: Boolean(emailResult?.sent),
+                    reason: emailResult?.reason || null,
+                    recipients: emailResult?.recipients || 0
+                }
             });
 
             console.log(`✅ Fecha importante creada: "${titulo}" por ${req.user.email} en taller ${taller_id}`);
+            if (emailResult?.sent) {
+                console.log(`📧 Recordatorio enviado por correo a ${emailResult.recipients} alumno(s)`);
+            } else {
+                console.log(`📭 Recordatorio sin envío de correo: ${emailResult?.reason || 'NO_REASON'}`);
+            }
 
         } catch (error) {
             console.error('❌ Error al crear fecha importante:', error);
@@ -321,12 +470,38 @@ class CalendarioController {
                 });
             }
 
+            const tituloNotificacion = updateData.titulo || fechaExistente.titulo;
+            const descripcionNotificacion =
+                updateData.descripcion !== undefined
+                    ? updateData.descripcion
+                    : fechaExistente.descripcion;
+            const fechaEventoNotificacion = updateData.fecha_evento || fechaExistente.fecha_evento;
+            const tipoEventoNotificacion = updateData.tipo_evento || fechaExistente.tipo_evento || 'evento';
+
+            const emailResult = await CalendarioController.notificarRecordatorioPorCorreo({
+                tallerId: fechaExistente.taller_id,
+                titulo: tituloNotificacion,
+                descripcion: descripcionNotificacion,
+                fechaEvento: fechaEventoNotificacion,
+                tipoEvento: tipoEventoNotificacion
+            });
+
             res.json({
                 message: 'Fecha importante actualizada exitosamente',
-                data: fechaActualizada
+                data: fechaActualizada,
+                email: {
+                    sent: Boolean(emailResult?.sent),
+                    reason: emailResult?.reason || null,
+                    recipients: emailResult?.recipients || 0
+                }
             });
 
             console.log(`✅ Fecha importante actualizada: ${id} por ${req.user.email}`);
+            if (emailResult?.sent) {
+                console.log(`📧 Actualización de recordatorio enviada por correo a ${emailResult.recipients} alumno(s)`);
+            } else {
+                console.log(`📭 Actualización de recordatorio sin envío de correo: ${emailResult?.reason || 'NO_REASON'}`);
+            }
 
         } catch (error) {
             console.error('❌ Error al actualizar fecha importante:', error);
@@ -412,6 +587,14 @@ class CalendarioController {
                 return res.status(400).json({
                     error: 'Parámetro requerido',
                     message: 'Se requiere el parámetro tallerId'
+                });
+            }
+
+            const allowedTallerIds = await getAllowedTallerIdsForUser(req.user);
+            if (!userCanAccessTaller(allowedTallerIds, tallerId)) {
+                return res.status(403).json({
+                    error: 'Acceso denegado',
+                    message: 'No tienes permisos para ver el calendario de este taller'
                 });
             }
 
@@ -619,10 +802,29 @@ class CalendarioController {
                 });
             }
 
+            const allowedTallerIds = await getAllowedTallerIdsForUser(req.user);
+            if (tallerId && !userCanAccessTaller(allowedTallerIds, tallerId)) {
+                return res.status(403).json({
+                    error: 'Acceso denegado',
+                    message: 'No tienes permisos para ver el calendario de este taller'
+                });
+            }
+
+            if (allowedTallerIds !== null && allowedTallerIds.length === 0) {
+                return res.json({
+                    message: 'Calendario de rango obtenido exitosamente',
+                    data: {},
+                    fechaInicio,
+                    fechaFin,
+                    tallerId: tallerId || null
+                });
+            }
+
             const eventosPorDia = await CalendarioModel.getCalendarioRango(
                 fechaInicio, 
                 fechaFin, 
-                tallerId || null
+                tallerId || null,
+                allowedTallerIds
             );
 
             res.json({

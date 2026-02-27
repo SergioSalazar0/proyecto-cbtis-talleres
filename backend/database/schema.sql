@@ -112,11 +112,9 @@ CREATE TABLE asistencias (
     alumno_id UUID REFERENCES perfiles_alumno(id) ON DELETE CASCADE,
     taller_id UUID REFERENCES talleres(id) ON DELETE CASCADE,
     fecha_sesion DATE NOT NULL,
+    sesion_asistencia_id UUID REFERENCES sesiones_asistencia(id) ON DELETE SET NULL,
     registrado_por UUID REFERENCES usuarios(id) ON DELETE SET NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-
-    -- Evitar duplicados por alumno/taller/sesion
-    UNIQUE(alumno_id, taller_id, fecha_sesion)
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Tabla de sesiones de asistencia (historial de aperturas/cierres de escaneo)
@@ -200,6 +198,13 @@ CREATE INDEX idx_talleres_instructor ON talleres(instructor_id);
 CREATE INDEX idx_inscripciones_alumno ON inscripciones(alumno_id);
 CREATE INDEX idx_inscripciones_taller ON inscripciones(taller_id);
 CREATE INDEX idx_asistencias_taller_fecha ON asistencias(taller_id, fecha_sesion);
+CREATE INDEX idx_asistencias_sesion_asistencia ON asistencias(sesion_asistencia_id);
+CREATE UNIQUE INDEX uq_asistencias_unica_con_sesion
+    ON asistencias(alumno_id, taller_id, fecha_sesion, sesion_asistencia_id)
+    WHERE sesion_asistencia_id IS NOT NULL;
+CREATE UNIQUE INDEX uq_asistencias_unica_sin_sesion
+    ON asistencias(alumno_id, taller_id, fecha_sesion)
+    WHERE sesion_asistencia_id IS NULL;
 CREATE INDEX idx_sesiones_asistencia_taller ON sesiones_asistencia(taller_id, created_at DESC);
 CREATE INDEX idx_sesiones_asistencia_fecha ON sesiones_asistencia(fecha_sesion);
 CREATE INDEX idx_avisos_taller ON avisos(taller_id);

@@ -505,7 +505,7 @@ class CalendarioModel {
      * @param {string} tallerId - ID del taller (opcional)
      * @returns {Promise<Array>} Eventos en el rango
      */
-    static async getCalendarioRango(fechaInicio, fechaFin, tallerId = null) {
+    static async getCalendarioRango(fechaInicio, fechaFin, tallerId = null, allowedTallerIds = null) {
         let whereConditions = [
             'f.activo = true',
             'f.fecha_evento >= $1',
@@ -518,6 +518,12 @@ class CalendarioModel {
             paramCount++;
             whereConditions.push(`f.taller_id = $${paramCount}`);
             params.push(tallerId);
+        }
+
+        if (Array.isArray(allowedTallerIds)) {
+            paramCount++;
+            whereConditions.push(`f.taller_id = ANY($${paramCount}::uuid[])`);
+            params.push(allowedTallerIds);
         }
 
         const whereClause = `WHERE ${whereConditions.join(' AND ')}`;
