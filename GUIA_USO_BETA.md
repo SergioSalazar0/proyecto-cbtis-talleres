@@ -2,7 +2,7 @@
 
 > **¡Bienvenido a la versión beta!** Esta guía te ayudará a usar el sistema y proporcionar feedback valioso.
 
-> **Actualización Febrero 2026:** Esta guía ya contempla módulos nuevos como asistencias por sesión, información de emergencia y chatbot institucional.
+> **Actualización Febrero 2026:** Esta guía ya contempla módulos nuevos como asistencias por sesión, información de emergencia, chatbot institucional y notificaciones por correo para avisos/calendario.
 
 ---
 
@@ -447,6 +447,8 @@ erDiagram
 - ✅ Información de emergencia del alumno (`/api/informacion-emergencia`)
 - ✅ Registro de asistencias por sesión (`/api/talleres/:id/sesiones-asistencia`)
 - ✅ Chatbot institucional (`/api/chatbot/chat`)
+- ✅ Notificación por correo al crear/editar avisos (`/api/avisos`)
+- ✅ Notificación por correo al crear/editar recordatorios del calendario (`/api/calendario`)
 
 ### Paso 1: Accede al Sistema
 ```
@@ -484,6 +486,21 @@ erDiagram
 1. Abre el chat desde el frontend
 2. Haz preguntas generales del plantel o talleres
 3. Si tu duda es administrativa específica, te redirigirá a Servicios Escolares
+
+### Paso 8: Verifica Notificaciones por Correo (Instructor)
+1. En `backend/.env`, configura al menos:
+    - `EMAIL_ENABLED=true`
+    - `GMAIL_USER=tu_correo@gmail.com`
+    - `GMAIL_APP_PASSWORD=tu_app_password_de_google`
+2. Reinicia el backend después de guardar cambios en `.env`.
+3. Crea o edita un aviso y verifica el mensaje de confirmación de envío.
+4. Crea o edita un recordatorio en calendario y verifica el mensaje de envío.
+
+> Nota: la contraseña de correo debe ser **App Password de Google** (no la contraseña normal de Gmail).
+
+### Solución rápida de errores comunes (Correo)
+- **"Los datos proporcionados no son válidos" al crear aviso**: revisa los campos requeridos (título, contenido, taller) y la fecha de expiración si aplica.
+- **No llega correo aunque el aviso se guarda**: verifica que existan alumnos inscritos activos en ese taller y que tengan email registrado.
 
 ---
 
@@ -528,6 +545,12 @@ R: Sí, una vez inscrito apareces en su lista de alumnos.
 
 **P: ¿Es seguro?**  
 R: Sí, usamos encriptación (HTTPS) y autenticación JWT. Tu contraseña está hasheada.
+
+**P: ¿Los avisos y recordatorios del calendario se envían por correo?**  
+R: Sí, cuando el instructor crea o edita esos registros se intenta notificar por email a alumnos inscritos activos del taller.
+
+**P: ¿Por qué falla el correo con Gmail?**  
+R: Normalmente por credenciales SMTP. Usa App Password (16 caracteres) y activa verificación en 2 pasos en la cuenta de Google.
 
 ---
 
