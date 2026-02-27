@@ -3,10 +3,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
+import rateLimit from 'express-rate-limit';
 import { testConnection } from './database/config-db.js';
 
-// Importar todas tus rutas
+// Importar rutas
 import authRoutes from './routes/auth.js';
 import tallerRoutes from './routes/talleres.js';
 import avisosRoutes from './routes/avisos.js';
@@ -15,64 +16,47 @@ import adminRoutes from './routes/admin.js';
 import informacionEmergenciaRoutes from './routes/informacionEmergencia.js';
 import chatbotRoutes from './routes/chatbot.js';
 
-import rateLimit from 'express-rate-limit';
+dotenv.config();
 
-dotenv.config(); // Movido arriba para asegurar que las variables carguen primero
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 const app = express();
 
-// --- 1. CONFIGURACIÓN DE SEGURIDAD ---
-app.use(helmet({
-    contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false
-}));
+// --- 1. CONFIGURACIÓN DE SEGURIDAD Y MIDDLEWARES ---
+app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 
-// Lista de URLs permitidas (He incluido todas las que has usado)
-const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5500',
-    'https://proyecto-cbtis-talleres-osbk.vercel.app',
-    'https://proyecto-cbtis-talleres-osbk-akspyk5bs-sergiosalazar0s-projects.vercel.app',
-    process.env.FRONTEND_URL // Mantenemos la variable de Railway por seguridad
-].filter(Boolean); // Elimina valores nulos o vacíos
-
-app.use(cors({
-    origin: function (origin, callback) {
-        // Permitir si el origen está en la lista o si no hay origen (como Postman o el Health Check)
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.log("⚠️ Intento de conexión bloqueado por CORS desde:", origin);
-            callback(new Error('No permitido por la política de CORS de Sergio'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    optionsSuccessStatus: 200 // Importante para navegadores antiguos y preflights
-}));
-
-// --- 2. CONFIGURACIÓN DEL ESCUDO (Rate Limit) ---
+// Rate Limit para el Chatbot (Integrado correctamente)
 const chatLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, 
-    max: 10, // Subí un poco el rango para evitar bloqueos accidentales en pruebas
-    message: { response: "Has enviado muchos mensajes. Espera un minuto." },
+    windowMs: 1 * 60 * 1000, // 1 minuto
+    max: 5, 
+    message: { error: "Has superado el límite de mensajes. Espera un minuto." },
     standardHeaders: true,
     legacyHeaders: false,
 });
 
-// --- 3. MIDDLEWARES DE PARSEO ---
+// CORS Dinámico (Combina variables de entorno y locales)
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5500',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('No permitido por CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true
+}));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// --- 4. RUTAS DE LA API ---
-
-// NUEVO: Ruta raíz para el Health Check de Railway (Evita que el contenedor se detenga)
-app.get('/', (req, res) => {
-    res.status(200).send('Servidor Backend CBTIS 258 Operativo');
-});
+// --- 2. RUTAS DE LA API ---
+app.get('/', (req, res) => res.status(200).send('Servidor CBTIS 258 Operativo'));
+app.get('/api/health', (req, res) => res.json({ status: 'OK', timestamp: new Date() }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/talleres', tallerRoutes);
@@ -80,58 +64,31 @@ app.use('/api/avisos', avisosRoutes);
 app.use('/api/calendario', calendarioRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/informacion-emergencia', informacionEmergenciaRoutes);
-app.use('/api/chatbot', chatbotRoutes);
 
-app.get('/api/health', (req, res) => {
-    res.json({ 
-        status: 'OK',
-        message: 'Servidor Backend operativo',
-        timestamp: new Date().toISOString()
-    });
-});
+// Aplicación del middleware de límite aquí
+app.use('/api/chatbot', chatLimiter, chatbotRoutes);
 
-// --- 5. MANEJO DE RUTAS NO ENCONTRADAS (404) ---
-app.use((req, res) => {
-    res.status(404).json({ 
-        error: 'Ruta no encontrada',
-        message: `El backend no reconoce la ruta: ${req.originalUrl}` 
-    });
-});
+// --- 3. MANEJO DE ERRORES ---
+app.use((req, res) => res.status(404).json({ error: 'Ruta no encontrada' }));
 
-// --- 6. MANEJO GLOBAL DE ERRORES (Anti-CORS silencioso) ---
 app.use((err, req, res, next) => {
-    console.error('❌ ERROR INTERNO:', err.stack);
-    res.status(500).json({
-        error: 'Error interno del servidor',
-        message: err.message
-    });
+    console.error('❌ ERROR CRÍTICO:', err.stack);
+    res.status(500).json({ error: 'Error interno del servidor', message: err.message });
 });
 
-// --- 7. INICIO DEL SERVIDOR ---
+// --- 4. INICIO DEL SERVIDOR ---
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
     try {
-        console.log('--- Iniciando orquestación de servicios ---');
-        
-        const dbConnected = await testConnection();
-        
-        if (!dbConnected) {
-            console.error('⚠️ ATENCIÓN: La conexión a la BD falló.');
-        } else {
-            console.log('✅ Conexión a base de datos exitosa.');
-        }
-
+        await testConnection();
+        // Escuchar en '0.0.0.0' es vital para Railway/Docker
         app.listen(PORT, '0.0.0.0', () => {
-            console.log('==============================================');
-            console.log(`🚀 BACKEND ARRANCADO EN PUERTO ${PORT}`);
-            console.log(`🌍 MODO: ${process.env.NODE_ENV || 'development'}`);
-            console.log('==============================================');
+            console.log(`🚀 Servidor iniciado en puerto ${PORT}`);
         });
-
     } catch (error) {
-        console.error('❌ Error crítico en startup:', error);
-        process.exit(1); 
+        console.error('❌ Error de conexión:', error);
+        process.exit(1);
     }
 };
 
