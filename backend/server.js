@@ -68,6 +68,12 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // --- 4. RUTAS DE LA API ---
+
+// NUEVO: Ruta raíz para el Health Check de Railway (Evita que el contenedor se detenga)
+app.get('/', (req, res) => {
+    res.status(200).send('Servidor Backend CBTIS 258 Operativo');
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/talleres', tallerRoutes);
 app.use('/api/avisos', avisosRoutes);
@@ -93,7 +99,6 @@ app.use((req, res) => {
 });
 
 // --- 6. MANEJO GLOBAL DE ERRORES (Anti-CORS silencioso) ---
-// Este bloque es vital para que si algo explota, el navegador reciba un JSON y no un error de red
 app.use((err, req, res, next) => {
     console.error('❌ ERROR INTERNO:', err.stack);
     res.status(500).json({
