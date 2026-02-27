@@ -3,7 +3,9 @@ class ChatbotAssistant {
         this.isOpen = false;
         this.messages = [];
         this.isLoading = false;
-        const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'http://localhost:5000/api';
+        const baseUrl = (typeof API_BASE_URL !== 'undefined' && API_BASE_URL)
+            ? API_BASE_URL
+            : (window.API_BASE_URL || 'https://backend-talleres-production.up.railway.app/api');
         this.apiUrl = `${baseUrl}/chatbot/chat`;
         this.clearSessionUrl = `${baseUrl}/chatbot/clear-session`;
         this.sessionId = null;
