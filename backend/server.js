@@ -20,24 +20,49 @@ dotenv.config();
 
 const app = express();
 
+const getEnvBoolean = (value, defaultValue = false) => {
+    if (value === undefined || value === null || value === '') return defaultValue;
+    return ['true', '1', 'yes', 'on'].includes(String(value).trim().toLowerCase());
+};
+
+const parseOriginsFromEnv = () => {
+    const values = [process.env.FRONTEND_URL, process.env.FRONTEND_URLS]
+        .filter(Boolean)
+        .flatMap((entry) => entry.split(','))
+        .map((origin) => origin.trim())
+        .filter(Boolean);
+
+    const originSet = new Set(values);
+
+    if (process.env.NODE_ENV !== 'production') {
+        originSet.add('http://localhost:3000');
+        originSet.add('http://localhost:5500');
+        originSet.add('http://127.0.0.1:5500');
+    }
+
+    return Array.from(originSet);
+};
+
 // --- 1. CONFIGURACIÓN DE SEGURIDAD Y MIDDLEWARES ---
 app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
 
 // Rate Limit para el Chatbot (Integrado correctamente)
-const chatLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minuto
-    max: 5, 
-    message: { error: "Has superado el límite de mensajes. Espera un minuto." },
-    standardHeaders: true,
-    legacyHeaders: false,
-});
+const isRateLimitDisabled = getEnvBoolean(process.env.DISABLE_RATE_LIMIT, false);
+const chatWindowMs = parseInt(process.env.CHAT_RATE_LIMIT_WINDOW_MS || process.env.RATE_LIMIT_WINDOW_MS || '60000', 10);
+const chatMaxRequests = parseInt(process.env.CHAT_RATE_LIMIT_MAX_REQUESTS || process.env.AUTH_RATE_LIMIT || '5', 10);
+
+const chatLimiter = isRateLimitDisabled
+    ? (req, res, next) => next()
+    : rateLimit({
+        windowMs: chatWindowMs,
+        max: chatMaxRequests,
+        message: { error: "Has superado el límite de mensajes. Espera un minuto." },
+        standardHeaders: true,
+        legacyHeaders: false,
+    });
 
 // CORS Dinámico (Combina variables de entorno y locales)
-const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5500',
-    process.env.FRONTEND_URL
-].filter(Boolean);
+const allowedOrigins = parseOriginsFromEnv();
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -78,6 +103,8 @@ app.use((err, req, res, next) => {
 
 // --- 4. INICIO DEL SERVIDOR ---
 const PORT = process.env.PORT || 5000;
+
+console.log('🌐 Orígenes CORS permitidos:', allowedOrigins);
 
 process.on('uncaughtException', (err) => {
     console.error('❌ EXCEPCIÓN NO CAPTURADA:', err);
