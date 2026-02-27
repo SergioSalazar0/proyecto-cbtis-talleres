@@ -79,6 +79,16 @@ app.use((err, req, res, next) => {
 // --- 4. INICIO DEL SERVIDOR ---
 const PORT = process.env.PORT || 5000;
 
+process.on('uncaughtException', (err) => {
+    console.error('❌ EXCEPCIÓN NO CAPTURADA:', err);
+    process.exit(1); // Esto nos dirá en los logs EXACTAMENTE por qué muere
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ PROMESA NO MANEJADA:', reason);
+    process.exit(1);
+});
+
 const startServer = async () => {
     try {
         await testConnection();
