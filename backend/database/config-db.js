@@ -1,11 +1,8 @@
-import pg from 'pg';
+import pkg from 'pg';
 import dotenv from 'dotenv';
 
-// Solo cargar variables de .env si NO estamos en producción
-if (process.env.NODE_ENV !== 'production') {
-    dotenv.config();
-}
-const { Pool } = pg;
+dotenv.config();
+const { Pool } = pkg;
 
 /**
  * Configuración del pool de conexiones PostgreSQL
@@ -14,8 +11,7 @@ const poolConfig = {
     // URL de conexión desde variables de entorno
     connectionString: process.env.DATABASE_URL,
     
-    // CONFIGURACIÓN OBLIGATORIA PARA RAILWAY
-    // Esto evita el error "Connection reset by peer"
+    // Configuración SSL para Railway
     ssl: {
         rejectUnauthorized: false
     },
@@ -24,8 +20,10 @@ const poolConfig = {
     max: 20, 
     min: 2,  
     idleTimeoutMillis: 30000, 
-    connectionTimeoutMillis: 5000, // Aumentado para evitar bloqueos al arrancar
+    connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MS || '10000', 10),
     acquireTimeoutMillis: 60000, 
+    keepAlive: true,
+    keepAliveInitialDelayMillis: parseInt(process.env.DB_KEEPALIVE_DELAY_MS || '10000', 10),
     
     // Configuración adicional
     allowExitOnIdle: false, 

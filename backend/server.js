@@ -104,6 +104,9 @@ app.use((err, req, res, next) => {
 // --- 4. INICIO DEL SERVIDOR ---
 const PORT = process.env.PORT || 5000;
 
+const DB_CONNECT_RETRIES = parseInt(process.env.DB_CONNECT_RETRIES || '10', 10);
+const DB_CONNECT_RETRY_DELAY_MS = parseInt(process.env.DB_CONNECT_RETRY_DELAY_MS || '5000', 10);
+
 console.log('🌐 Orígenes CORS permitidos:', allowedOrigins);
 
 process.on('uncaughtException', (err) => {
@@ -118,7 +121,26 @@ process.on('unhandledRejection', (reason, promise) => {
 
 const startServer = async () => {
     try {
-        await testConnection();
+        let isConnected = false;
+
+        for (let attempt = 1; attempt <= DB_CONNECT_RETRIES; attempt++) {
+            isConnected = await testConnection();
+
+            if (isConnected) {
+                break;
+            }
+
+            if (attempt < DB_CONNECT_RETRIES) {
+                const waitTime = DB_CONNECT_RETRY_DELAY_MS * attempt;
+                console.warn(`⏳ DB no disponible. Reintento ${attempt}/${DB_CONNECT_RETRIES} en ${waitTime}ms...`);
+                await new Promise((resolve) => setTimeout(resolve, waitTime));
+            }
+        }
+
+        if (!isConnected) {
+            throw new Error('No se pudo establecer conexión con la base de datos tras múltiples reintentos');
+        }
+
         // Escuchar en '0.0.0.0' es vital para Railway/Docker
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`🚀 Servidor iniciado en puerto ${PORT}`);
