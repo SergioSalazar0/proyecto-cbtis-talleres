@@ -38,18 +38,20 @@ app.use(helmet({
     crossOriginEmbedderPolicy: false
 }));
 
-// --- 2. CONFIGURACIÓN DE CORS ---
+// Configuración estricta con tu URL correcta
 const allowedOrigins = [
-    'http://localhost:3000', 
-    'http://127.0.0.1:3000', 
-    'http://localhost:5500', 
-    'http://127.0.0.1:5500',
-    process.env.FRONTEND_URL 
-].filter(Boolean);
+    'https://proyecto-cbtis-talleres-osbk-akspyk5bs-sergiosalazar0s-projects.vercel.app'
+];
 
-// Temporalmente, permite todo para descartar problemas de configuración
 app.use(cors({
-    origin: '*', 
+    origin: function (origin, callback) {
+        // Permitir si el origen está en la lista o si no hay origen (ej. herramientas de desarrollo)
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
