@@ -17,16 +17,7 @@ import chatbotRoutes from './routes/chatbot.js';
 
 import rateLimit from 'express-rate-limit';
 
-// Configuración del escudo
-const chatLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, 
-    max: 5, 
-    message: { response: "Has enviado muchos mensajes. Espera un minuto." },
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-
-dotenv.config();
+dotenv.config(); // Movido arriba para asegurar que las variables carguen primero
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -38,24 +29,39 @@ app.use(helmet({
     crossOriginEmbedderPolicy: false
 }));
 
-// Configuración estricta con tu URL correcta
+// Lista de URLs permitidas (He incluido todas las que has usado)
 const allowedOrigins = [
-    'https://proyecto-cbtis-talleres-osbk-akspyk5bs-sergiosalazar0s-projects.vercel.app'
-];
+    'http://localhost:3000',
+    'http://localhost:5500',
+    'https://proyecto-cbtis-talleres-osbk.vercel.app',
+    'https://proyecto-cbtis-talleres-osbk-akspyk5bs-sergiosalazar0s-projects.vercel.app',
+    process.env.FRONTEND_URL // Mantenemos la variable de Railway por seguridad
+].filter(Boolean); // Elimina valores nulos o vacíos
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Permitir si el origen está en la lista o si no hay origen (ej. herramientas de desarrollo)
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        // Permitir si el origen está en la lista o si no hay origen (como Postman o el Health Check)
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'));
+            console.log("⚠️ Intento de conexión bloqueado por CORS desde:", origin);
+            callback(new Error('No permitido por la política de CORS de Sergio'));
         }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    credentials: true,
+    optionsSuccessStatus: 200 // Importante para navegadores antiguos y preflights
 }));
+
+// --- 2. CONFIGURACIÓN DEL ESCUDO (Rate Limit) ---
+const chatLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, 
+    max: 10, // Subí un poco el rango para evitar bloqueos accidentales en pruebas
+    message: { response: "Has enviado muchos mensajes. Espera un minuto." },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
 
 // --- 3. MIDDLEWARES DE PARSEO ---
 app.use(express.json({ limit: '10mb' }));
@@ -71,10 +77,14 @@ app.use('/api/informacion-emergencia', informacionEmergenciaRoutes);
 app.use('/api/chatbot', chatbotRoutes);
 
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'Servidor Backend en puerto 5000 operativo' });
+    res.json({ 
+        status: 'OK',
+        message: 'Servidor Backend operativo',
+        timestamp: new Date().toISOString()
+    });
 });
 
-// --- 5. MANEJO DE RUTAS NO ENCONTRADAS ---
+// --- 5. MANEJO DE RUTAS NO ENCONTRADAS (404) ---
 app.use((req, res) => {
     res.status(404).json({ 
         error: 'Ruta no encontrada',
@@ -82,33 +92,40 @@ app.use((req, res) => {
     });
 });
 
-// --- 6. INICIO DEL SERVIDOR (MODO ANTICRASH) ---
+// --- 6. MANEJO GLOBAL DE ERRORES (Anti-CORS silencioso) ---
+// Este bloque es vital para que si algo explota, el navegador reciba un JSON y no un error de red
+app.use((err, req, res, next) => {
+    console.error('❌ ERROR INTERNO:', err.stack);
+    res.status(500).json({
+        error: 'Error interno del servidor',
+        message: err.message
+    });
+});
+
+// --- 7. INICIO DEL SERVIDOR ---
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
     try {
         console.log('--- Iniciando orquestación de servicios ---');
         
-        // Intentamos conectar a la BD
         const dbConnected = await testConnection();
         
         if (!dbConnected) {
             console.error('⚠️ ATENCIÓN: La conexión a la BD falló.');
-            console.error('⚠️ El servidor arrancará de todos modos para que puedas ver el error en los logs.');
         } else {
             console.log('✅ Conexión a base de datos exitosa.');
         }
 
         app.listen(PORT, '0.0.0.0', () => {
             console.log('==============================================');
-            console.log(`🚀 BACKEND TALLERES CBTIS 258 ARRANCADO en puerto ${PORT}`);
-            console.log(`🌍 URL: http://localhost:${PORT}`);
+            console.log(`🚀 BACKEND ARRANCADO EN PUERTO ${PORT}`);
+            console.log(`🌍 MODO: ${process.env.NODE_ENV || 'development'}`);
             console.log('==============================================');
         });
 
     } catch (error) {
         console.error('❌ Error crítico en startup:', error);
-        // Solo salimos si el servidor no puede ni siquiera levantar el puerto
         process.exit(1); 
     }
 };
