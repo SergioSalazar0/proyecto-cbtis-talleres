@@ -9,40 +9,35 @@ const { Pool } = pg;
 
 /**
  * Configuración del pool de conexiones PostgreSQL
- * 
- * Fundamentos de esta configuración:
- * - Pool de conexiones: Reutiliza conexiones DB para mejor performance
- * - Timeouts configurables: Evita conexiones colgadas
- * - SSL automático en producción: Seguridad en deployment
- * - Manejo de errores robusto: Reconexión automática y logging
  */
-
 const poolConfig = {
     // URL de conexión desde variables de entorno
     connectionString: process.env.DATABASE_URL,
     
-    // Configuración del pool
-    max: 20, // Máximo 20 conexiones concurrentes
-    min: 2,  // Mínimo 2 conexiones mantenidas
-    idleTimeoutMillis: 30000, // Tiempo antes de cerrar conexión inactiva (30s)
-    connectionTimeoutMillis: 2000, // Timeout para obtener conexión (2s)
-    acquireTimeoutMillis: 60000, // Timeout máximo para obtener conexión (60s)
+    // CONFIGURACIÓN OBLIGATORIA PARA RAILWAY
+    // Esto evita el error "Connection reset by peer"
+    ssl: {
+        rejectUnauthorized: false
+    },
     
-    // SSL automático en producción
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    // Configuración del pool
+    max: 20, 
+    min: 2,  
+    idleTimeoutMillis: 30000, 
+    connectionTimeoutMillis: 5000, // Aumentado para evitar bloqueos al arrancar
+    acquireTimeoutMillis: 60000, 
     
     // Configuración adicional
-    allowExitOnIdle: false, // No permitir que el proceso termine si hay conexiones idle
+    allowExitOnIdle: false, 
     
     // Configuración de queries
-    statement_timeout: 30000, // 30 segundos máximo por query
-    query_timeout: 30000,     // 30 segundos máximo por query
+    statement_timeout: 30000, 
+    query_timeout: 30000,    
     
     // Configuración de aplicación
     application_name: 'talleres_cbtis258_api',
     
     // IMPORTANTE: Configuración de encoding UTF-8
-    // Esto asegura que los caracteres especiales (acentos, ñ, etc) se manejen correctamente
     client_encoding: 'UTF8'
 };
 
@@ -55,7 +50,6 @@ const pool = new Pool(poolConfig);
 
 // Evento cuando se conecta un nuevo cliente
 pool.on('connect', async (client) => {
-    // Configurar UTF-8 en cada nueva conexión
     try {
         await client.query("SET CLIENT_ENCODING TO 'UTF8'");
         await client.query("SET NAMES 'UTF8'");
@@ -77,7 +71,6 @@ pool.on('release', (err, client) => {
 // Evento de error en el pool
 pool.on('error', (err, client) => {
     console.error('❌ Error inesperado en el pool de base de datos:', err.message);
-    // En producción, aquí implementarías notificaciones de alertas
 });
 
 // Evento cuando se remueve un cliente
@@ -89,7 +82,6 @@ pool.on('remove', (client) => {
 
 /**
  * Función para probar la conexión a la base de datos
- * @returns {Promise<boolean>} True si la conexión es exitosa
  */
 export const testConnection = async () => {
     let client;
@@ -97,8 +89,6 @@ export const testConnection = async () => {
         console.log('🔄 Probando conexión a la base de datos...');
         
         client = await pool.connect();
-        
-        // Ejecutar query simple para verificar conexión
         const result = await client.query('SELECT NOW() as current_time, version() as db_version');
         
         console.log('✅ Conexión a base de datos exitosa');
@@ -112,14 +102,6 @@ export const testConnection = async () => {
         console.error(`   Mensaje: ${error.message}`);
         console.error(`   Código: ${error.code}`);
         
-        if (error.code === 'ECONNREFUSED') {
-            console.error('   💡 Sugerencia: Verifica que PostgreSQL esté corriendo');
-        } else if (error.code === '3D000') {
-            console.error('   💡 Sugerencia: Verifica que la base de datos existe');
-        } else if (error.code === '28P01') {
-            console.error('   💡 Sugerencia: Verifica las credenciales de la base de datos');
-        }
-        
         return false;
         
     } finally {
@@ -130,10 +112,7 @@ export const testConnection = async () => {
 };
 
 /**
- * Función para ejecutar queries con manejo de errores mejorado
- * @param {string} text - Query SQL
- * @param {Array} params - Parámetros del query
- * @returns {Promise<Object>} Resultado del query
+ * Función para ejecutar queries
  */
 export const query = async (text, params = []) => {
     const start = Date.now();
@@ -141,19 +120,9 @@ export const query = async (text, params = []) => {
     
     try {
         client = await pool.connect();
-        
-        if (process.env.NODE_ENV === 'development') {
-            console.log('🔍 Ejecutando query:', text.replace(/\s+/g, ' ').trim().substring(0, 100) + '...');
-        }
-        
         const result = await client.query(text, params);
         
         const duration = Date.now() - start;
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`⚡ Query ejecutado en ${duration}ms, ${result.rowCount} filas afectadas`);
-        }
-        
-        // Log queries lentos (más de 1 segundo)
         if (duration > 1000) {
             console.warn(`⚠️ Query lento detectado (${duration}ms):`, text.substring(0, 200));
         }
@@ -161,12 +130,7 @@ export const query = async (text, params = []) => {
         return result;
         
     } catch (error) {
-        const duration = Date.now() - start;
-        console.error(`❌ Error en query (${duration}ms):`, error.message);
-        console.error('📝 Query:', text);
-        console.error('📥 Parámetros:', params);
-        
-        // Re-throw el error para que lo maneje el controlador
+        console.error('❌ Error en query:', error.message);
         throw error;
         
     } finally {
@@ -178,32 +142,18 @@ export const query = async (text, params = []) => {
 
 /**
  * Función para ejecutar transacciones
- * @param {Function} callback - Función que recibe el cliente y ejecuta queries
- * @returns {Promise<any>} Resultado de la transacción
  */
 export const transaction = async (callback) => {
     const client = await pool.connect();
     
     try {
         await client.query('BEGIN');
-        
-        if (process.env.NODE_ENV === 'development') {
-            console.log('🔄 Iniciando transacción...');
-        }
-        
         const result = await callback(client);
-        
         await client.query('COMMIT');
-        
-        if (process.env.NODE_ENV === 'development') {
-            console.log('✅ Transacción completada exitosamente');
-        }
-        
         return result;
         
     } catch (error) {
         await client.query('ROLLBACK');
-        
         console.error('❌ Error en transacción, haciendo rollback:', error.message);
         throw error;
         
@@ -214,21 +164,19 @@ export const transaction = async (callback) => {
 
 /**
  * Función para obtener estadísticas del pool
- * @returns {Object} Estadísticas actuales del pool
  */
 export const getPoolStats = () => {
     return {
-        totalCount: pool.totalCount,     // Total de clientes en el pool
-        idleCount: pool.idleCount,       // Clientes inactivos
-        waitingCount: pool.waitingCount, // Requests esperando conexión
-        maxConnections: poolConfig.max,   // Máximo configurado
-        activeConnections: pool.totalCount - pool.idleCount // Conexiones activas
+        totalCount: pool.totalCount,
+        idleCount: pool.idleCount,
+        waitingCount: pool.waitingCount,
+        maxConnections: poolConfig.max,
+        activeConnections: pool.totalCount - pool.idleCount
     };
 };
 
 /**
  * Función para cerrar todas las conexiones del pool
- * Útil para testing y cierre graceful de la aplicación
  */
 export const closePool = async () => {
     try {
@@ -241,7 +189,6 @@ export const closePool = async () => {
     }
 };
 
-// Exportar el pool para uso directo si es necesario
 export default pool;
 
 // Manejar cierre graceful del proceso

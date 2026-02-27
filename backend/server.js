@@ -17,15 +17,15 @@ import chatbotRoutes from './routes/chatbot.js';
 
 import rateLimit from 'express-rate-limit';
 
-// Configuración del escudo: Máximo 5 preguntas cada minuto por usuario
+// Configuración del escudo
 const chatLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minuto
+    windowMs: 1 * 60 * 1000, 
     max: 5, 
     message: { response: "Has enviado muchos mensajes. Espera un minuto." },
     standardHeaders: true,
     legacyHeaders: false,
 });
-// Cargar variables de entorno
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -33,15 +33,22 @@ const __dirname = dirname(__filename);
 const app = express();
 
 // --- 1. CONFIGURACIÓN DE SEGURIDAD ---
-// Desactivamos CSP para evitar que bloquee scripts de jQuery o estilos locales en desarrollo
 app.use(helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false
 }));
 
-// --- 2. CONFIGURACIÓN DE CORS (CRUCIAL PARA PUERTO 3000) ---
+// --- 2. CONFIGURACIÓN DE CORS ---
+const allowedOrigins = [
+    'http://localhost:3000', 
+    'http://127.0.0.1:3000', 
+    'http://localhost:5500', 
+    'http://127.0.0.1:5500',
+    process.env.FRONTEND_URL 
+].filter(Boolean);
+
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'],
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -60,12 +67,11 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/informacion-emergencia', informacionEmergenciaRoutes);
 app.use('/api/chatbot', chatbotRoutes);
 
-// Health check para verificar que el puerto 5000 está vivo
 app.get('/api/health', (req, res) => {
     res.json({ status: 'Servidor Backend en puerto 5000 operativo' });
 });
 
-// --- 5. MANEJO DE RUTAS NO ENCONTRADAS (404) ---
+// --- 5. MANEJO DE RUTAS NO ENCONTRADAS ---
 app.use((req, res) => {
     res.status(404).json({ 
         error: 'Ruta no encontrada',
@@ -73,25 +79,34 @@ app.use((req, res) => {
     });
 });
 
-// --- 6. INICIO DEL SERVIDOR ---
+// --- 6. INICIO DEL SERVIDOR (MODO ANTICRASH) ---
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
     try {
-        // Intentar conectar a la base de datos antes de arrancar
+        console.log('--- Iniciando orquestación de servicios ---');
+        
+        // Intentamos conectar a la BD
         const dbConnected = await testConnection();
         
-        app.listen(PORT, () => {
+        if (!dbConnected) {
+            console.error('⚠️ ATENCIÓN: La conexión a la BD falló.');
+            console.error('⚠️ El servidor arrancará de todos modos para que puedas ver el error en los logs.');
+        } else {
+            console.log('✅ Conexión a base de datos exitosa.');
+        }
+
+        app.listen(PORT, '0.0.0.0', () => {
             console.log('==============================================');
-            console.log(`🚀 BACKEND TALLERES CBTIS 258 ARRANCADO`);
+            console.log(`🚀 BACKEND TALLERES CBTIS 258 ARRANCADO en puerto ${PORT}`);
             console.log(`🌍 URL: http://localhost:${PORT}`);
-            console.log(`🤖 CHATBOT: http://localhost:${PORT}/api/chatbot/chat`);
-            console.log(`🛡️  CORS habilitado para puerto 3000`);
             console.log('==============================================');
         });
+
     } catch (error) {
-        console.error('❌ Error crítico al iniciar servidor:', error);
-        process.exit(1);
+        console.error('❌ Error crítico en startup:', error);
+        // Solo salimos si el servidor no puede ni siquiera levantar el puerto
+        process.exit(1); 
     }
 };
 
