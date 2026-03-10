@@ -1,6 +1,6 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-let transporter = null;
+let resendClient = null;
 
 const getEnvBoolean = (value, defaultValue = false) => {
     if (value === undefined) return defaultValue;
@@ -10,51 +10,36 @@ const getEnvBoolean = (value, defaultValue = false) => {
 const isEmailEnabled = () => getEnvBoolean(process.env.EMAIL_ENABLED, false);
 
 const getEmailConfig = () => {
-    const host = process.env.SMTP_HOST || 'smtp.gmail.com';
-    const port = parseInt(process.env.SMTP_PORT || '587', 10);
-    const secure = getEnvBoolean(process.env.SMTP_SECURE, false);
-    const user = process.env.GMAIL_USER;
-    const pass = process.env.GMAIL_APP_PASSWORD;
+    const apiKey = process.env.RESEND_API_KEY;
+    const fromAddress = process.env.EMAIL_FROM_ADDRESS;
 
     return {
-        host,
-        port,
-        secure,
-        user,
-        pass,
+        apiKey,
         fromName: process.env.EMAIL_FROM_NAME || 'Sistema Talleres CBTIS 258',
-        fromAddress: process.env.EMAIL_FROM_ADDRESS || user
+        fromAddress
     };
 };
 
-const getTransporter = () => {
-    if (transporter) {
-        return transporter;
+const getResendClient = () => {
+    if (resendClient) {
+        return resendClient;
     }
 
     const config = getEmailConfig();
 
-    if (!config.user || !config.pass) {
+    if (!config.apiKey) {
         return null;
     }
 
-    transporter = nodemailer.createTransport({
-        host: config.host,
-        port: config.port,
-        secure: config.secure,
-        auth: {
-            user: config.user,
-            pass: config.pass
-        }
-    });
+    resendClient = new Resend(config.apiKey);
 
-    return transporter;
+    return resendClient;
 };
 
 export const canSendEmails = () => {
     if (!isEmailEnabled()) return false;
     const config = getEmailConfig();
-    return Boolean(config.user && config.pass);
+    return Boolean(config.apiKey && config.fromAddress);
 };
 
 export const sendBulkEmail = async ({ recipients, subject, text, html }) => {
@@ -76,18 +61,18 @@ export const sendBulkEmail = async ({ recipients, subject, text, html }) => {
         };
     }
 
-    const emailTransporter = getTransporter();
+    const client = getResendClient();
 
-    if (!emailTransporter) {
+    if (!client) {
         return {
             sent: false,
-            reason: 'TRANSPORTER_NOT_AVAILABLE'
+            reason: 'RESEND_CLIENT_NOT_AVAILABLE'
         };
     }
 
     const config = getEmailConfig();
 
-    const info = await emailTransporter.sendMail({
+    const response = await client.emails.send({
         from: `"${config.fromName}" <${config.fromAddress}>`,
         to: config.fromAddress,
         bcc: validRecipients,
@@ -96,9 +81,17 @@ export const sendBulkEmail = async ({ recipients, subject, text, html }) => {
         html
     });
 
+    if (response?.error) {
+        return {
+            sent: false,
+            reason: 'RESEND_SEND_ERROR',
+            error: response.error.message || 'Error desconocido de Resend'
+        };
+    }
+
     return {
         sent: true,
-        messageId: info.messageId,
+        messageId: response?.data?.id || null,
         recipients: validRecipients.length
     };
 };

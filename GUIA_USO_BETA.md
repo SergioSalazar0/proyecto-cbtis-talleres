@@ -490,13 +490,13 @@ erDiagram
 ### Paso 8: Verifica Notificaciones por Correo (Instructor)
 1. En `backend/.env`, configura al menos:
     - `EMAIL_ENABLED=true`
-    - `GMAIL_USER=tu_correo@gmail.com`
-    - `GMAIL_APP_PASSWORD=tu_app_password_de_google`
+    - `RESEND_API_KEY=re_xxxxxxxxxxxxxxxxx`
+    - `EMAIL_FROM_ADDRESS=tu_remitente_verificado@tudominio.com`
 2. Reinicia el backend después de guardar cambios en `.env`.
 3. Crea o edita un aviso y verifica el mensaje de confirmación de envío.
 4. Crea o edita un recordatorio en calendario y verifica el mensaje de envío.
 
-> Nota: la contraseña de correo debe ser **App Password de Google** (no la contraseña normal de Gmail).
+> Nota: el remitente (`EMAIL_FROM_ADDRESS`) debe estar validado en Resend (dominio o sender verificado).
 
 ### Solución rápida de errores comunes (Correo)
 - **"Los datos proporcionados no son válidos" al crear aviso**: revisa los campos requeridos (título, contenido, taller) y la fecha de expiración si aplica.
@@ -549,8 +549,8 @@ R: Sí, usamos encriptación (HTTPS) y autenticación JWT. Tu contraseña está 
 **P: ¿Los avisos y recordatorios del calendario se envían por correo?**  
 R: Sí, cuando el instructor crea o edita esos registros se intenta notificar por email a alumnos inscritos activos del taller.
 
-**P: ¿Por qué falla el correo con Gmail?**  
-R: Normalmente por credenciales SMTP. Usa App Password (16 caracteres) y activa verificación en 2 pasos en la cuenta de Google.
+**P: ¿Por qué falla el correo con Resend?**  
+R: Normalmente por `RESEND_API_KEY` invalida o remitente no verificado. Revisa que `EMAIL_FROM_ADDRESS` exista en Resend y que `EMAIL_ENABLED=true`.
 
 ---
 

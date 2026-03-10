@@ -76,23 +76,20 @@ FRONTEND_URL=http://localhost:3000
 RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX_REQUESTS=100
 
-# Email de avisos (Gmail SMTP)
+# Email de avisos (Resend)
 EMAIL_ENABLED=false
-GMAIL_USER=tu_correo@gmail.com
-GMAIL_APP_PASSWORD=tu_app_password_de_16_caracteres
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_SECURE=false
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxx
 EMAIL_FROM_NAME=Sistema Talleres CBTIS 258
-EMAIL_FROM_ADDRESS=tu_correo@gmail.com
+EMAIL_FROM_ADDRESS=onboarding@resend.dev
 ```
 
-### Envío de avisos por Gmail
+### Envio de avisos por Resend
 
 - El endpoint `POST /api/avisos` ya puede enviar correo a alumnos inscritos del taller.
 - No requiere cambios en base de datos.
-- Para activarlo, establece `EMAIL_ENABLED=true` y configura `GMAIL_USER` + `GMAIL_APP_PASSWORD`.
-- Recomendación: usa contraseña de aplicación de Google (no tu contraseña normal).
+- Para activarlo, establece `EMAIL_ENABLED=true` y configura `RESEND_API_KEY`.
+- Configura `EMAIL_FROM_ADDRESS` con un remitente validado en Resend (dominio o sender verificado).
+- Prueba rapida por consola: `npm run email:test -- correo@destino.com`
 
 ### 2. Base de Datos
 
